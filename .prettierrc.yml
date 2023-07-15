@@ -1,2 +1,5 @@
 semi: false
 arrowParens: avoid
+plugins:
+  - prettier-plugin-organize-imports
+  - prettier-plugin-tailwindcss
