@@ -12,6 +12,7 @@
 		"preact": "^10.13.1"
 	},
 	"devDependencies": {
+		"@darkobits/vite-plugin-favicons": "^0.3.0",
 		"@preact/preset-vite": "^2.5.0",
 		"autoprefixer": "^10.4.14",
 		"postcss": "^8.4.26",
