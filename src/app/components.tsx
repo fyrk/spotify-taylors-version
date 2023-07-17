@@ -2,26 +2,26 @@ import { SpotifyApi } from "@spotify/web-api-ts-sdk"
 import { useEffect, useRef, useState } from "preact/hooks"
 import { Track } from "../../node_modules/@spotify/web-api-ts-sdk/src/types"
 import { PlaylistPlaceholderIcon, TrackPlaceholderIcon } from "../icons"
-import { PlaylistReplacements, TrackReplacement } from "./util"
+import { ScannedPlaylist, TrackReplacement } from "./util"
 
 export const PlaylistsView = ({
   playlists,
   spotify,
 }: {
-  playlists: PlaylistReplacements[]
+  playlists: ScannedPlaylist[]
   spotify: SpotifyApi
 }) => {
   const [extended, setExtended] = useState<string>(null)
   return (
     <div class="mx-auto w-full max-w-7xl">
-      {playlists.map(p => (
+      {playlists.map(playlist => (
         <PlaylistView
-          playlist={p}
-          isExtended={extended === p.playlist.id}
+          playlist={playlist}
+          isExtended={extended === playlist.id}
           onToggle={() =>
-            extended === p.playlist.id
+            extended === playlist.id
               ? setExtended(null)
-              : setExtended(p.playlist.id)
+              : setExtended(playlist.id)
           }
           spotify={spotify}
         />
@@ -31,18 +31,16 @@ export const PlaylistsView = ({
 }
 
 const PlaylistView = ({
-  playlist: playlistReplacements,
+  playlist,
   isExtended,
   onToggle,
   spotify,
 }: {
-  playlist: PlaylistReplacements
+  playlist: ScannedPlaylist
   isExtended: boolean
   onToggle: () => void
   spotify: SpotifyApi
 }) => {
-  const { playlist, replacements } = playlistReplacements
-
   const ref = useRef<HTMLDivElement>()
 
   useEffect(() => {
@@ -64,11 +62,13 @@ const PlaylistView = ({
 
         <div class="text-2xl">{playlist.name}</div>
       </div>
-      <div class="p-4" hidden={!isExtended}>
-        {replacements.map(r => {
-          return <ReplacementView replacement={r} spotify={spotify} />
-        })}
-      </div>
+      {isExtended && (
+        <div class="p-4">
+          {playlist.replacements.map(r => {
+            return <ReplacementView replacement={r} spotify={spotify} />
+          })}
+        </div>
+      )}
     </div>
   )
 }
@@ -118,7 +118,7 @@ const ReplacementView = ({
           <TrackView track={replacement.stolen} />
         </div>
         <div class="flex min-w-0 sm:w-[calc(50%_+_1.5rem)] sm:min-w-0">
-          <div class="mr-3 flex h-12 w-12 flex-none grow items-center justify-end sm:mr-0 sm:grow-0 sm:justify-center">
+          <div class="mr-3 flex h-12 w-12 flex-none items-center justify-end sm:mr-0 sm:justify-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

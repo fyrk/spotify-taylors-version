@@ -9,7 +9,7 @@ export default defineConfig({
     faviconsPlugin({
       icons: {
         favicons: {
-          source: "./public/no_scooter.png",
+          source: "./public/img/no_scooter_circle.svg",
         },
       },
     }),

@@ -4,6 +4,7 @@ import {
   Followers,
   IRedirectionStrategy,
   Image,
+  Page,
   PlaylistedTrack,
   SimplifiedPlaylist,
   UserReference,
@@ -26,12 +27,16 @@ export const createApiClient = (
   )
 }
 
-async function getPaginatedItems<T>(
+async function* getPaginatedItems<T>(
   spotify: SpotifyApi,
-  firstResponse: { items: T[]; next: string },
-): Promise<T[]> {
-  let resp = firstResponse
+  firstResponse: Promise<Page<T>>,
+): AsyncGenerator<{ total: number; item: T }> {
+  let resp = await firstResponse
   const items = resp.items
+  let counter = 1
+  for (let item of items) {
+    yield Promise.resolve({ total: resp.total, item })
+  }
   while (resp.next != null) {
     if (!resp.next.startsWith(SPOTIFY_ROOT_URL)) {
       throw Error(`Unexpected next URL: ${resp.next}`)
@@ -40,16 +45,17 @@ async function getPaginatedItems<T>(
       "GET",
       resp.next.substring(SPOTIFY_ROOT_URL.length),
     )
-    items.push(...resp.items)
+    for (let item of resp.items) {
+      yield Promise.resolve({ total: resp.total, item })
+    }
   }
-  return items
 }
 
-export const getAllUsersPlaylists = async (spotify: SpotifyApi) =>
-  await getPaginatedItems(
+export const getAllUsersPlaylists = (spotify: SpotifyApi) =>
+  getPaginatedItems(
     spotify,
     // @ts-ignore (SpotifyApi somehow has limit of 49 instead of 50)
-    await spotify.currentUser.playlists.playlists(50),
+    spotify.currentUser.playlists.playlists(50),
   )
 
 export interface PlaylistWithTracks {
@@ -78,14 +84,15 @@ export const getPlaylistWithTracks = async (
   if (!playlist.tracks.href.startsWith(SPOTIFY_ROOT_URL)) {
     throw Error(`Unexpected href: ${playlist.tracks.href}`)
   }
-  return {
-    ...playlist,
-    tracks: await getPaginatedItems(
-      spotify,
-      await spotify.makeRequest(
-        "GET",
-        playlist.tracks.href.substring(SPOTIFY_ROOT_URL.length),
-      ),
+  const tracks: PlaylistedTrack[] = []
+  for await (let { item } of getPaginatedItems(
+    spotify,
+    spotify.makeRequest<Page<PlaylistedTrack>>(
+      "GET",
+      playlist.tracks.href.substring(SPOTIFY_ROOT_URL.length),
     ),
+  )) {
+    tracks.push(item)
   }
+  return { ...playlist, tracks }
 }

@@ -3,6 +3,7 @@ import { useState } from "preact/hooks"
 import { AccessToken } from "../node_modules/@spotify/web-api-ts-sdk/src/types"
 import { createApiClient } from "./api"
 import Scaffold from "./scaffold"
+import noScooterCircle from "/img/no_scooter_circle.svg?url"
 import spotifyWhite from "/img/spotify_white.svg?url"
 
 export default function Home(_props: any) {
@@ -12,12 +13,18 @@ export default function Home(_props: any) {
   return (
     <Scaffold>
       <div></div>
-      <div class="mx-10 text-center">
-        <h1 class="mb-5 text-[max(min(10vw,7rem),5rem)] font-bold leading-none">
+      <div class="mx-10 mb-32 text-center">
+        <div class="mb-8 mt-16">
+          <img
+            class="mx-auto h-32 w-32 sm:h-40 sm:w-40"
+            src={noScooterCircle}
+          />
+        </div>
+        <h1 class="mb-8 text-[max(min(10vw,7rem),5rem)] font-bold leading-none">
           Taylor’s Version
         </h1>
         <div class="mb-16 text-[max(min(2.5vw,1.8rem),1.5rem)]">
-          Detect, replace, and block Taylor Swift’s stolen songs on Spotify
+          Find and replace Taylor Swift’s stolen songs in your Spotify playlists
         </div>
         <div class="mb-3">
           <button
