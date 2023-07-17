@@ -21,7 +21,9 @@ export const createApiClient = (
   }
   return SpotifyApi.withUserAuthorization(
     import.meta.env.VITE_SPOTIFY_CLIENT_ID,
-    "http://localhost:3000/app",
+    import.meta.env.PROD
+      ? import.meta.env.VITE_SPOTIFY_REDIRECT_URI
+      : "http://localhost:3000/app",
     Scopes.playlistRead,
     config,
   )
