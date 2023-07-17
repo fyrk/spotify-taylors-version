@@ -5,10 +5,21 @@ import {
   IRedirectionStrategy,
   User,
 } from "../../node_modules/@spotify/web-api-ts-sdk/src/types"
-import { createApiClient } from "../api"
+import {
+  createApiClient,
+  getAllUsersPlaylists,
+  getPlaylistWithTracks,
+} from "../api"
+import Scaffold from "../scaffold"
+import { PlaylistsView } from "./components"
+import { PlaylistReplacements, getTrackReplacements } from "./util"
 
 export default function App(_props: any) {
-  const [spotify, setSpotify] = useState<SpotifyApi>(null)
+  const [user, setUser] = useState<User>(null)
+  const [replaces, setReplaces] = useState<{
+    spotify: SpotifyApi
+    playlists: PlaylistReplacements[]
+  }>(null)
 
   useEffect(() => {
     ;(async () => {
@@ -20,62 +31,88 @@ export default function App(_props: any) {
         }
         public async onReturnFromRedirect(): Promise<void> {}
       }
-      const client = createApiClient(new HomeRedirectionStrategy())
-      await client.authenticate()
-      setSpotify(client)
+      const spotify = createApiClient(new HomeRedirectionStrategy())
+      const accessToken = await spotify.authenticate()
+      if (accessToken.access_token === "") {
+        route("/")
+      } else {
+        const user = await spotify.currentUser.profile()
+        setUser(user)
+
+        const simplifiedPlaylists = (
+          await getAllUsersPlaylists(spotify)
+        ).filter(p => p.owner.uri === user.uri)
+
+        const playlists = (
+          await Promise.allSettled(
+            simplifiedPlaylists.map(p => getPlaylistWithTracks(spotify, p)),
+          )
+        )
+          .map(result => {
+            if (result.status === "fulfilled") return result.value
+            throw Error(result.reason)
+          })
+          .map(p => getTrackReplacements(p))
+          .filter(p => p.replacements.length > 0)
+
+        setReplaces({ playlists, spotify })
+      }
     })()
   }, [])
 
   return (
-    <>
-      <header class="flex w-full items-center justify-between bg-[#303030] px-8 py-7">
-        <span class="text-4xl font-bold">Taylor’s Version</span>
-        <LogOutButton
-          spotify={spotify}
-          onLogOut={() => {
-            localStorage.removeItem(
-              "spotify-sdk:AuthorizationCodeWithPKCEStrategy:token",
-            )
-            route("/")
-          }}
-        />
+    <Scaffold>
+      <header class="mb-8 w-full items-center justify-between bg-[#303030] px-4 py-3 sm:px-7 sm:py-4">
+        <div class="my-2 inline-block text-2xl font-bold sm:text-4xl">
+          Taylor’s Version
+        </div>
+        <div class="float-right my-2 inline-block align-middle">
+          <LogOutButton
+            user={user}
+            onLogOut={() => {
+              localStorage.removeItem(
+                "spotify-sdk:AuthorizationCodeWithPKCEStrategy:token",
+              )
+              route("/")
+            }}
+          />
+        </div>
       </header>
-      <main></main>
-    </>
+      {replaces == null ? (
+        <div class="text-center">Scanning your playlists...</div>
+      ) : (
+        <div class="w-full grow p-5">
+          <PlaylistsView
+            playlists={replaces.playlists}
+            spotify={replaces.spotify}
+          />
+        </div>
+      )}
+    </Scaffold>
   )
 }
 
 function LogOutButton({
-  spotify,
+  user,
   onLogOut,
 }: {
-  spotify: SpotifyApi
+  user: User
   onLogOut: () => void
 }) {
-  const [user, setUser] = useState<User>(null)
-
-  useEffect(() => {
-    ;(async () => {
-      if (spotify != null) setUser(await spotify.currentUser.profile())
-    })()
-  }, [spotify])
-
   const profileImage =
     user && user.images.reduce((p, c) => (p.width < c.width ? c : p))
   return (
-    <>
-      <button
-        class="rounded-full bg-[#555555] p-2 text-xl font-semibold"
-        onClick={onLogOut}
-      >
-        <span class="flex items-center gap-2">
-          <img
-            src={profileImage && profileImage.url}
-            class="h-[1.5em] w-[1.5em] rounded-full"
-          />
-          <span class="mr-1 whitespace-nowrap">Log out</span>
-        </span>
-      </button>
-    </>
+    <button
+      class="rounded-full bg-[#555555] p-2 text-sm font-semibold sm:text-xl"
+      onClick={onLogOut}
+    >
+      <span class="flex items-center gap-2">
+        <img
+          src={profileImage && profileImage.url}
+          class="h-[1.5em] w-[1.5em] rounded-full"
+        />
+        <span class="mr-1 whitespace-nowrap">Log out</span>
+      </span>
+    </button>
   )
 }

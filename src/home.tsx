@@ -1,15 +1,18 @@
 import { route } from "preact-router"
 import { useState } from "preact/hooks"
+import { AccessToken } from "../node_modules/@spotify/web-api-ts-sdk/src/types"
 import { createApiClient } from "./api"
+import Scaffold from "./scaffold"
 import spotifyWhite from "/img/spotify_white.svg?url"
 
 export default function Home(_props: any) {
   const [isLoading, setIsLoading] = useState(false)
+  const [authError, setAuthError] = useState<string>(null)
 
   return (
-    <main class="mx-10 flex h-full flex-col items-center justify-between">
+    <Scaffold>
       <div></div>
-      <div class="text-center">
+      <div class="mx-10 text-center">
         <h1 class="mb-5 text-[max(min(10vw,7rem),5rem)] font-bold leading-none">
           Taylor’s Version
         </h1>
@@ -23,11 +26,21 @@ export default function Home(_props: any) {
             onClick={async () => {
               if (isLoading) return
               setIsLoading(true)
-              const accessToken = await createApiClient().authenticate()
+              setAuthError(null)
+              let accessToken: AccessToken
+              try {
+                accessToken = await createApiClient().authenticate()
+              } catch (e) {
+                console.error(e)
+                setAuthError(e.toString() || "")
+                setIsLoading(false)
+                return
+              }
               if (accessToken.access_token !== "") {
                 // if authenticate did not redirect, user is already authenticated
                 route("/app")
               }
+              setIsLoading(false)
             }}
           >
             <span class="flex items-center gap-4 text-2xl">
@@ -35,6 +48,17 @@ export default function Home(_props: any) {
               Log in with Spotify
             </span>
           </button>
+          {authError != null && (
+            <div class="mt-2 text-lg text-red-300">
+              Authentication failed. Please try again.
+              {authError !== "" && (
+                <>
+                  <br />
+                  <div class="text-xs">{authError}</div>
+                </>
+              )}
+            </div>
+          )}
         </div>
         <div class="mx-auto max-w-xs text-sm text-neutral-400">
           Your account data is processed locally and never leaves your device.{" "}
@@ -47,16 +71,6 @@ export default function Home(_props: any) {
           </a>
         </div>
       </div>
-      <div class="px-1 py-8">
-        Made with 💜 by{" "}
-        <a
-          class="text-green-300 hover:underline"
-          href="https://github.com/FlorianRaediker"
-          rel="noopener"
-        >
-          flo (Taylor’s Version)
-        </a>
-      </div>
-    </main>
+    </Scaffold>
   )
 }
