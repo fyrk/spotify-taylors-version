@@ -8,8 +8,8 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
-		"@spotify/web-api-ts-sdk": "^1.0.0",
-		"preact": "^10.13.1"
+		"@spotify/web-api-ts-sdk": "^1.1.1",
+		"preact": "^10.17.1"
 	},
 	"devDependencies": {
 		"@darkobits/vite-plugin-favicons": "^0.3.0",
