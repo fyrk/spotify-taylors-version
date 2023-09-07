@@ -7,14 +7,22 @@ import { ScannedPlaylist, TrackReplacement } from "./util"
 export const PlaylistsView = ({
   playlists,
   spotify,
+  onSelectPlaylist,
+  onSelectTrack,
 }: {
   playlists: ScannedPlaylist[]
   spotify: SpotifyApi
+  onSelectPlaylist: (playlistIndex: number, selected: boolean) => void
+  onSelectTrack: (
+    playlistIndex: number,
+    trackIndex: number,
+    selected: boolean,
+  ) => void
 }) => {
   const [extended, setExtended] = useState<string>(null)
   return (
     <div class="mx-auto w-full max-w-7xl">
-      {playlists.map(playlist => (
+      {playlists.map((playlist, i) => (
         <PlaylistView
           playlist={playlist}
           isExtended={extended === playlist.id}
@@ -22,6 +30,10 @@ export const PlaylistsView = ({
             extended === playlist.id
               ? setExtended(null)
               : setExtended(playlist.id)
+          }
+          onSelectPlaylist={selected => onSelectPlaylist(i, selected)}
+          onSelectTrack={(trackIndex, selected) =>
+            onSelectTrack(i, trackIndex, selected)
           }
           spotify={spotify}
         />
@@ -34,11 +46,15 @@ const PlaylistView = ({
   playlist,
   isExtended,
   onToggle,
+  onSelectPlaylist,
+  onSelectTrack,
   spotify,
 }: {
   playlist: ScannedPlaylist
   isExtended: boolean
   onToggle: () => void
+  onSelectPlaylist: (selected: boolean) => void
+  onSelectTrack: (trackIndex: number, selected: boolean) => void
   spotify: SpotifyApi
 }) => {
   const ref = useRef<HTMLDivElement>()
@@ -47,38 +63,63 @@ const PlaylistView = ({
     if (isExtended) ref.current.scrollIntoView({ behavior: "smooth" })
   }, [isExtended])
 
+  const isAllSelected = playlist.replacements.every(r => r.selected)
+  const isIndeterminate =
+    !isAllSelected && playlist.replacements.some(r => r.selected)
+
   return (
     <div
-      class="mb-7 w-full cursor-pointer rounded-lg bg-[#202020] p-3 hover:bg-[#282828]"
-      onClick={() => onToggle()}
+      class="mb-7 w-full rounded-lg bg-[#202020] hover:bg-[#282828]"
       ref={ref}
     >
-      <div class="sticky top-0 flex items-center gap-5 bg-inherit p-4">
+      <div
+        class="sticky top-0 flex cursor-pointer items-center gap-5 bg-inherit p-7"
+        onClick={() => onToggle()}
+      >
         {playlist.images[0] ? (
           <img src={playlist.images[0].url} class="h-24 w-24" />
         ) : (
           <PlaylistPlaceholderIcon class="h-24 w-24" />
         )}
 
-        <div class="text-2xl">{playlist.name}</div>
-      </div>
-      {isExtended && (
-        <div class="p-4">
-          {playlist.replacements.map(r => {
-            return <ReplacementView replacement={r} spotify={spotify} />
-          })}
+        <div class="grow text-2xl">{playlist.name}</div>
+        <div class="flex h-12 w-12 items-center justify-center self-center">
+          <input
+            type="checkbox"
+            class="h-6 w-6 cursor-pointer"
+            checked={isAllSelected}
+            indeterminate={isIndeterminate}
+            onChange={e => onSelectPlaylist(e.currentTarget.checked)}
+            onClick={e => e.stopPropagation()}
+          />
         </div>
-      )}
+      </div>
+      <div class="p-7 pt-4" hidden={!isExtended}>
+        {playlist.replacements.map(r => {
+          return (
+            <ReplacementView
+              replacement={r}
+              selected={r.selected}
+              spotify={spotify}
+              onSelect={selected => onSelectTrack(r.position, selected)}
+            />
+          )
+        })}
+      </div>
     </div>
   )
 }
 
 const ReplacementView = ({
   replacement,
+  selected,
   spotify,
+  onSelect,
 }: {
   replacement: TrackReplacement
+  selected: boolean
   spotify: SpotifyApi
+  onSelect: (selected: boolean) => void
 }) => {
   const TrackView = ({ track }: { track: Track }) => (
     <div class="flex min-w-0 gap-3">
@@ -138,6 +179,14 @@ const ReplacementView = ({
             <TrackView track={taylorsTrack} />
           </div>
         </div>
+      </div>
+      <div class="flex h-12 w-12 items-center justify-center self-center">
+        <input
+          type="checkbox"
+          class="h-6 w-6 cursor-pointer"
+          checked={selected}
+          onChange={e => onSelect(e.currentTarget.checked)}
+        />
       </div>
     </div>
   )

@@ -23,7 +23,7 @@ export const createApiClient = (
     import.meta.env.VITE_SPOTIFY_CLIENT_ID,
     import.meta.env.PROD
       ? import.meta.env.VITE_SPOTIFY_REDIRECT_URI
-      : "http://localhost:3000/app",
+      : "http://localhost:3000",
     Scopes.playlistRead,
     config,
   )
@@ -35,7 +35,6 @@ async function* getPaginatedItems<T>(
 ): AsyncGenerator<{ total: number; item: T }> {
   let resp = await firstResponse
   const items = resp.items
-  let counter = 1
   for (let item of items) {
     yield Promise.resolve({ total: resp.total, item })
   }

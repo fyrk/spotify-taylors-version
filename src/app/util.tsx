@@ -1,5 +1,6 @@
 import { SpotifyApi } from "@spotify/web-api-ts-sdk"
 import {
+  PlaylistedTrack,
   SimplifiedPlaylist,
   Track,
   User,
@@ -15,6 +16,7 @@ export interface TrackReplacement {
   position: number
   stolen: Track
   taylorsVersionId: string
+  selected: boolean
 }
 
 export interface ScannedPlaylist extends PlaylistWithTracks {
@@ -31,10 +33,10 @@ const TAYLORS_VERSIONS: {
 } = _TAYLORS_VERSIONS_JSON
 
 const getTrackReplacements = (
-  playlist: PlaylistWithTracks,
+  tracks: PlaylistedTrack[],
 ): TrackReplacement[] => {
   let replacements: TrackReplacement[] = []
-  playlist.tracks.forEach((t, i) => {
+  tracks.forEach((t, i) => {
     if (t.track.type === "track") {
       const track = t.track as Track
       const taylorsVersion = TAYLORS_VERSIONS[track.external_ids.isrc]
@@ -43,6 +45,7 @@ const getTrackReplacements = (
           position: i + 1,
           stolen: track,
           taylorsVersionId: taylorsVersion.replacements[0].id,
+          selected: true,
         })
       }
     }
@@ -67,7 +70,7 @@ export async function scanUserPlaylists(
           spotify,
           playlist,
         )
-        const replacements = getTrackReplacements(playlistWithTracks)
+        const replacements = getTrackReplacements(playlistWithTracks.tracks)
         if (replacements.length > 0) {
           return { ...playlistWithTracks, replacements }
         }
@@ -90,8 +93,12 @@ export async function scanUserPlaylists(
 
   return (await Promise.allSettled(promises))
     .map(result => {
-      if (result.status === "fulfilled") return result.value
-      throw Error(result.reason)
+      if (result.status === "fulfilled") {
+        return result.value
+      } else {
+        console.error("Playlist scan failed")
+        return null
+      }
     })
     .filter(p => p != null)
 }

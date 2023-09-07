@@ -1,14 +1,16 @@
-import { route } from "preact-router"
 import { useState } from "preact/hooks"
-import { AccessToken } from "../node_modules/@spotify/web-api-ts-sdk/src/types"
-import { createApiClient } from "./api"
 import Scaffold from "./scaffold"
 import noScooterCircle from "/img/no_scooter_circle.svg?url"
 import spotifyWhite from "/img/spotify_white.svg?url"
 
-export default function Home(_props: any) {
+export default function Home({
+  authError,
+  onLogin,
+}: {
+  authError: string
+  onLogin: () => void
+}) {
   const [isLoading, setIsLoading] = useState(false)
-  const [authError, setAuthError] = useState<string>(null)
 
   return (
     <Scaffold>
@@ -33,21 +35,11 @@ export default function Home(_props: any) {
             onClick={async () => {
               if (isLoading) return
               setIsLoading(true)
-              setAuthError(null)
-              let accessToken: AccessToken
               try {
-                accessToken = await createApiClient().authenticate()
-              } catch (e) {
-                console.error(e)
-                setAuthError(e.toString() || "")
+                onLogin()
+              } finally {
                 setIsLoading(false)
-                return
               }
-              if (accessToken.access_token !== "") {
-                // if authenticate did not redirect, user is already authenticated
-                route("/app")
-              }
-              setIsLoading(false)
             }}
           >
             <span class="flex items-center gap-4 text-2xl">
