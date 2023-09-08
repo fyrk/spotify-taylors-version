@@ -1,10 +1,10 @@
-import { SpotifyApi } from "@spotify/web-api-ts-sdk"
 import {
   PlaylistedTrack,
   SimplifiedPlaylist,
+  SpotifyApi,
   Track,
   User,
-} from "../../node_modules/@spotify/web-api-ts-sdk/src/types"
+} from "@spotify/web-api-ts-sdk"
 import {
   PlaylistWithTracks,
   getAllUsersPlaylists,

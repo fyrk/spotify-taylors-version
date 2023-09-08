@@ -1,7 +1,7 @@
 import { useState } from "preact/hooks"
-import Scaffold from "./scaffold"
+import { ExternalLink, Scaffold } from "./components"
 import noScooterCircle from "/img/no_scooter_circle.svg?url"
-import spotifyWhite from "/img/spotify_white.svg?url"
+import spotifyIconWhite from "/img/spotify_icon_white.svg?url"
 
 export default function Home({
   authError,
@@ -14,9 +14,8 @@ export default function Home({
 
   return (
     <Scaffold>
-      <div></div>
-      <div class="mx-10 mb-32 text-center">
-        <div class="mb-8 mt-16">
+      <div class="mx-10 text-center">
+        <div class="mb-8 mt-8 sm:mt-24">
           <img
             class="mx-auto h-32 w-32 sm:h-40 sm:w-40"
             src={noScooterCircle}
@@ -25,12 +24,13 @@ export default function Home({
         <h1 class="mb-8 text-[max(min(10vw,7rem),5rem)] font-bold leading-none">
           Taylor’s Version
         </h1>
-        <div class="mb-16 text-[max(min(2.5vw,1.8rem),1.5rem)]">
-          Find and replace Taylor Swift’s stolen songs in your Spotify playlists
+        <div class="mx-auto mb-16 max-w-md text-[max(min(2.5vw,1.8rem),1.5rem)] sm:max-w-none">
+          Find and replace Taylor&nbsp;Swift’s stolen songs in your Spotify
+          playlists
         </div>
         <div class="mb-3">
           <button
-            class="whitespace-nowrap rounded-full bg-[#1db954] p-5"
+            class="whitespace-nowrap rounded-full bg-spotify-green p-5"
             disabled={isLoading}
             onClick={async () => {
               if (isLoading) return
@@ -43,7 +43,7 @@ export default function Home({
             }}
           >
             <span class="flex items-center gap-4 text-2xl">
-              <img src={spotifyWhite} class="h-[1.5em] w-[1.5em]" />
+              <img src={spotifyIconWhite} class="h-[1.5em] w-[1.5em]" />
               Log in with Spotify
             </span>
           </button>
@@ -59,15 +59,13 @@ export default function Home({
             </div>
           )}
         </div>
-        <div class="mx-auto max-w-xs text-sm text-neutral-400">
-          Your account data is processed locally and never leaves your device.{" "}
-          <a
-            class="text-green-200 hover:underline"
-            href="https://github.com/FlorianRaediker/spotify-taylors-version"
-            rel="noopener"
-          >
-            View the source code here
-          </a>
+        <div class="mx-auto max-w-xs">
+          <small>
+            Your account data is processed locally and never leaves your device.{" "}
+            <ExternalLink href="https://github.com/FlorianRaediker/spotify-taylors-version">
+              View the source code here
+            </ExternalLink>
+          </small>
         </div>
       </div>
     </Scaffold>

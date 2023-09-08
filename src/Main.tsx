@@ -1,8 +1,8 @@
 import { IRedirectionStrategy, SpotifyApi } from "@spotify/web-api-ts-sdk"
 import { useEffect, useState } from "preact/hooks"
+import Home from "./Home"
 import { createApiClient } from "./api"
-import App from "./app/app"
-import Home from "./home"
+import App from "./app/App"
 
 export default function Main() {
   const [spotify, setSpotify] = useState<SpotifyApi>(null)

@@ -1,8 +1,7 @@
-import { SpotifyApi } from "@spotify/web-api-ts-sdk"
+import { SpotifyApi, Track } from "@spotify/web-api-ts-sdk"
 import { useEffect, useRef, useState } from "preact/hooks"
-import { Track } from "../../node_modules/@spotify/web-api-ts-sdk/src/types"
 import { PlaylistPlaceholderIcon, TrackPlaceholderIcon } from "../icons"
-import { ScannedPlaylist, TrackReplacement } from "./util"
+import { ScannedPlaylist, TrackReplacement } from "./scan"
 
 export const PlaylistsView = ({
   playlists,

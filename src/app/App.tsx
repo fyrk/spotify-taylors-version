@@ -1,13 +1,12 @@
-import { SpotifyApi } from "@spotify/web-api-ts-sdk"
+import { SpotifyApi, User } from "@spotify/web-api-ts-sdk"
 import { useEffect, useState } from "preact/hooks"
-import { User } from "../../node_modules/@spotify/web-api-ts-sdk/src/types"
-import Scaffold from "../scaffold"
+import { Scaffold } from "../components"
 import { PlaylistsView } from "./components"
 import {
   PlaylistScanProgress,
   ScannedPlaylist,
   scanUserPlaylists,
-} from "./util"
+} from "./scan"
 import noScooterCircle from "/img/no_scooter_circle.svg?url"
 
 export default function App({
@@ -35,17 +34,17 @@ export default function App({
 
   return (
     <Scaffold>
-      <header class="mb-8 w-full bg-[#303030] px-4 py-3 sm:px-7 sm:py-4">
-        <div class="inline-block text-2xl font-bold sm:text-4xl">
+      <header class="mb-8 flex w-full items-center justify-between bg-neutral-800 px-4 py-4 sm:px-7 sm:py-6">
+        <div class="whitespace-nowrap text-2xl font-bold sm:text-4xl">
           <div class="inline-block">
             <img
               src={noScooterCircle}
-              class="mr-3 inline-block h-[1.2em] w-[1.2em]"
+              class="mr-3 inline-block h-[1.2em] w-[1.2em] align-text-bottom"
             />
           </div>
-          <div class="my-2 inline-block">Taylor’s Version</div>
+          <div class="inline-block">Taylor’s Version</div>
         </div>
-        <div class="float-right my-2 inline-block align-middle">
+        <div>
           <LogOutButton user={user} onLogout={onLogout} />
         </div>
       </header>
@@ -73,7 +72,7 @@ function LogOutButton({
     user && user.images.reduce((p, c) => (p.width < c.width ? c : p))
   return (
     <button
-      class="rounded-full bg-[#555555] p-2 text-sm font-semibold sm:text-xl"
+      class="rounded-full bg-neutral-600 p-2 text-sm font-semibold sm:text-xl"
       onClick={onLogout}
     >
       <span class="flex items-center gap-2">
@@ -93,11 +92,18 @@ const ScanProgress = ({
   scanProgress: PlaylistScanProgress
 }) => {
   return (
-    <div class="text-center">
-      <div class="mb-2 text-lg">Scanning your playlists...</div>
-      <div class="h-2 w-44 rounded-full bg-neutral-600">
+    <div class="w-full text-center">
+      <div class="mb-8 text-3xl" id="scan-progress">
+        Scanning your playlists
+      </div>
+      <div
+        class="mx-auto mb-3 h-3 w-44 rounded-full bg-neutral-600"
+        role="progressbar"
+        aria-labelledby="scan-progress"
+        aria-valuenow={Math.round(scanProgress.progress * 100)}
+      >
         <div
-          class="h-full rounded-full bg-[#1db954]"
+          class="h-full rounded-full bg-accent"
           style={{ width: `${scanProgress.progress * 100}%` }}
         ></div>
       </div>
