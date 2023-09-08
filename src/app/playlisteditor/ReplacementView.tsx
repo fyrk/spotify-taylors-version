@@ -1,7 +1,37 @@
 import { Track } from "@spotify/web-api-ts-sdk"
-import { Checkbox } from "../../components"
+import { Checkbox, ExternalLink } from "../../components"
 import { TrackPlaceholderIcon } from "../../icons"
 import { TrackReplacements } from "../../types"
+
+const TrackView = ({ track }: { track: Track | null }) => (
+  <div class="grid min-w-0 grid-cols-[3rem_1fr] gap-3">
+    {track && track.album.images[0] ? (
+      <a href={track && track.external_urls.spotify} target="_blank">
+        <img src={track.album.images[0].url} />
+      </a>
+    ) : (
+      <TrackPlaceholderIcon />
+    )}
+    <div class="min-w-0">
+      <div class="overflow-hidden text-ellipsis whitespace-nowrap">
+        <ExternalLink
+          href={track && track.external_urls.spotify}
+          class="hover:underline"
+        >
+          {track && track.name}
+        </ExternalLink>
+      </div>
+      <div class="overflow-hidden text-ellipsis whitespace-nowrap text-neutral-400">
+        <ExternalLink
+          href={track && track.album.external_urls.spotify}
+          class="hover:underline"
+        >
+          {track && track.album.name}
+        </ExternalLink>
+      </div>
+    </div>
+  </div>
+)
 
 export default function ReplacementView({
   replacement,
@@ -14,24 +44,6 @@ export default function ReplacementView({
   selected: boolean
   onSelect: (selected: boolean) => void
 }) {
-  const TrackView = ({ track }: { track: Track | null }) => (
-    <div class="flex min-w-0 gap-3">
-      {track && track.album.images[0] ? (
-        <img src={track.album.images[0].url} class="h-12 w-12" />
-      ) : (
-        <TrackPlaceholderIcon class="h-12 w-12" />
-      )}
-      <div class="min-w-0">
-        <div class="overflow-hidden text-ellipsis whitespace-nowrap">
-          {track && track.name}
-        </div>
-        <div class="overflow-hidden text-ellipsis whitespace-nowrap text-neutral-400">
-          {track && track.album.name}
-        </div>
-      </div>
-    </div>
-  )
-
   return (
     // grid  <sm: position (1), stolen (2-3), arrow (4), tv (5-6), checkbox (7)
     // grid >=sm: position (1), stolen (2-7)\ arrow (2), tv (3-6), checkbox (7-7)

@@ -5,7 +5,7 @@ import { HeartIcon } from "./icons"
 export const Scaffold = ({ children }) => (
   <main class="flex h-full flex-col items-center justify-between">
     {children}
-    <div class="mt-16 pb-4 text-center">
+    <div class="mt-16 pb-8 text-center">
       <p class="mb-2">
         Made with <HeartIcon class="inline h-6 w-6 text-accent" /> by{" "}
         <ExternalLink href="https://github.com/FlorianRaediker">

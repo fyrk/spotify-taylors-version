@@ -2,6 +2,7 @@ import { SpotifyApi } from "@spotify/web-api-ts-sdk"
 import { useState } from "preact/hooks"
 import { ScannedPlaylist } from "../../types"
 import PlaylistView from "./PlaylistView"
+import spotifyLogoGreen from "/img/spotify_logo_green.svg?url"
 
 export default function PlaylistEditor({
   playlists,
@@ -23,7 +24,7 @@ export default function PlaylistEditor({
     <div class="w-full grow p-5">
       <div class="mx-auto w-full max-w-4xl">
         {/* TODO: add button */}
-        <div class="mb-10 text-center text-xl">
+        <div class="mb-10 text-center text-lg sm:text-xl">
           You can also choose which songs you would like to replace.
           <br />
           Tap on a playlist to select individual tracks.
@@ -71,6 +72,15 @@ export default function PlaylistEditor({
               spotify={spotify}
             />
           ))}
+        </div>
+        <div class="mb-8 mt-16 text-center">
+          {/* see https://developer.spotify.com/documentation/design#using-our-content */}
+          <div>Music data from the official API of</div>
+          <img
+            src={spotifyLogoGreen}
+            class="mt-[35px] inline h-[70px]"
+            alt="Spotify Green Logo"
+          />
         </div>
       </div>
     </div>

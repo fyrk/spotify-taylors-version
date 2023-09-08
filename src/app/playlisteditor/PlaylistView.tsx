@@ -1,6 +1,6 @@
 import { SpotifyApi, Track } from "@spotify/web-api-ts-sdk"
 import { useEffect, useRef, useState } from "preact/hooks"
-import { Checkbox } from "../../components"
+import { Checkbox, ExternalLink } from "../../components"
 import { PlaylistPlaceholderIcon } from "../../icons"
 import { ScannedPlaylist } from "../../types"
 import ReplacementView from "./ReplacementView"
@@ -64,8 +64,20 @@ export default function PlaylistView({
           <PlaylistPlaceholderIcon class="h-24 w-24" />
         )}
 
-        <div class="self-center text-2xl font-semibold sm:text-4xl">
-          {playlist.name}
+        <div class="flex h-full flex-col justify-between self-center">
+          <div></div>
+          <div class="text-2xl font-semibold sm:text-4xl">{playlist.name}</div>
+          <div class="text-sm text-neutral-400">
+            <span class="mr-1">
+              {playlist.replacements.length} tracks found
+            </span>{" "}
+            •{" "}
+            <span class="ml-1">
+              <ExternalLink href={playlist.external_urls.spotify}>
+                Open in Spotify
+              </ExternalLink>
+            </span>
+          </div>
         </div>
         <div class="flex items-center justify-start self-center">
           <Checkbox
@@ -78,7 +90,7 @@ export default function PlaylistView({
         </div>
       </div>
       {isExtended && (
-        <div class="p-4">
+        <div class="p-4 pt-6">
           {playlist.replacements.map((r, i) => {
             return (
               <ReplacementView

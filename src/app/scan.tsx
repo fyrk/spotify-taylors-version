@@ -49,7 +49,7 @@ export async function scanUserPlaylists(
         const playlistWithTracks = await getPlaylistWithTracks(
           spotify,
           playlist,
-          "track(album(images,name),external_ids.isrc,external_urls(spotify),href,id,name,type)",
+          "track(album(external_urls.spotify,images,name),external_ids.isrc,external_urls.spotify,href,id,name,type)",
         )
         const replacements = getTrackReplacements(playlistWithTracks.tracks)
         if (replacements.length > 0) {
