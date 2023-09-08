@@ -17,7 +17,7 @@ export default function Home({
       <div class="mx-10 text-center">
         <div class="mb-8 mt-8 sm:mt-24">
           <img
-            class="mx-auto h-32 w-32 sm:h-40 sm:w-40"
+            class="mx-auto h-32 w-32 rounded-full sm:h-40 sm:w-40"
             src={noScooterCircle}
           />
         </div>

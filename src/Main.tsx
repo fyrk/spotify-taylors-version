@@ -1,7 +1,7 @@
 import { IRedirectionStrategy, SpotifyApi } from "@spotify/web-api-ts-sdk"
 import { useEffect, useState } from "preact/hooks"
 import Home from "./Home"
-import { createApiClient } from "./api"
+import { createSpotifyApi } from "./api"
 import App from "./app/App"
 
 export default function Main() {
@@ -19,7 +19,7 @@ export default function Main() {
           }
           public async onReturnFromRedirect(): Promise<void> {}
         }
-        const sdk = createApiClient(new NoRedirectionStrategy())
+        const sdk = createSpotifyApi(new NoRedirectionStrategy())
         const { authenticated } = await sdk.authenticate()
         if (authenticated && !spotify) {
           setSpotify(sdk)
@@ -47,7 +47,7 @@ export default function Main() {
       authError={authError}
       onLogin={async () => {
         try {
-          const sdk = createApiClient()
+          const sdk = createSpotifyApi()
           const { authenticated } = await sdk.authenticate()
           if (authenticated) {
             // this should never be reached since authenticate redirects

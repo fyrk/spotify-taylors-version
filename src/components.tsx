@@ -40,3 +40,7 @@ export const ExternalLink = ({
     children={children}
   />
 )
+
+export const Checkbox = (props: JSX.IntrinsicElements["input"]) => (
+  <input type="checkbox" {...props} class={"accent-accent " + props.class} />
+)

@@ -5,28 +5,9 @@ import {
   Track,
   User,
 } from "@spotify/web-api-ts-sdk"
-import {
-  PlaylistWithTracks,
-  getAllUsersPlaylists,
-  getPlaylistWithTracks,
-} from "../api"
+import { getAllUserPlaylists, getPlaylistWithTracks } from "../api"
+import { Progress, ScannedPlaylist, TrackReplacements } from "../types"
 import _TAYLORS_VERSIONS_JSON from "./taylorsversions.json"
-
-export interface TrackReplacement {
-  position: number
-  stolen: Track
-  taylorsVersionId: string
-  selected: boolean
-}
-
-export interface ScannedPlaylist extends PlaylistWithTracks {
-  replacements: TrackReplacement[]
-}
-
-export interface PlaylistScanProgress {
-  progress: number
-  currentPlaylistName: string
-}
 
 const TAYLORS_VERSIONS: {
   [key: string]: { replacements: Array<{ id: string }> }
@@ -34,8 +15,8 @@ const TAYLORS_VERSIONS: {
 
 const getTrackReplacements = (
   tracks: PlaylistedTrack[],
-): TrackReplacement[] => {
-  let replacements: TrackReplacement[] = []
+): TrackReplacements[] => {
+  let replacements: TrackReplacements[] = []
   tracks.forEach((t, i) => {
     if (t.track.type === "track") {
       const track = t.track as Track
@@ -44,8 +25,7 @@ const getTrackReplacements = (
         replacements.push({
           position: i + 1,
           stolen: track,
-          taylorsVersionId: taylorsVersion.replacements[0].id,
-          selected: true,
+          taylorsVersionIds: taylorsVersion.replacements.map(r => r.id),
         })
       }
     }
@@ -56,7 +36,7 @@ const getTrackReplacements = (
 export async function scanUserPlaylists(
   spotify: SpotifyApi,
   user: User,
-  onProgress: (progress: PlaylistScanProgress) => void,
+  onProgress: (progress: Progress) => void,
 ): Promise<ScannedPlaylist[]> {
   let counter = 0
 
@@ -69,6 +49,7 @@ export async function scanUserPlaylists(
         const playlistWithTracks = await getPlaylistWithTracks(
           spotify,
           playlist,
+          "track(album(images,name),external_ids.isrc,external_urls(spotify),href,id,name,type)",
         )
         const replacements = getTrackReplacements(playlistWithTracks.tracks)
         if (replacements.length > 0) {
@@ -78,16 +59,13 @@ export async function scanUserPlaylists(
       return null
     } finally {
       counter++
-      onProgress({
-        progress: counter / total,
-        currentPlaylistName: playlist.name,
-      })
+      onProgress({ current: counter, total, text: playlist.name })
     }
   }
 
   const promises = []
 
-  for await (let { total, item } of getAllUsersPlaylists(spotify)) {
+  for await (let { total, item } of getAllUserPlaylists(spotify)) {
     promises.push(scanPlaylist(item, total))
   }
 
