@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/react"
 import {
   PlaylistedTrack,
   SimplifiedPlaylist,
@@ -83,8 +84,14 @@ export async function scanUserPlaylists(
         scannedPlaylists.push(result.value)
       }
     } else {
-      console.error("Playlist scan failed", result.reason)
       errors.push({ playlist: playlists[i], reason: result.reason })
+      ;(async () => {
+        // @ts-ignore
+        const error = new Error("Playlist scan failed", {
+          cause: result.reason,
+        })
+        Sentry.captureException(error)
+      })()
     }
   })
   return { playlists: scannedPlaylists, errors }

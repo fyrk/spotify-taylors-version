@@ -106,7 +106,7 @@ export default function PlaylistEditor({
           <div class="mt-10 text-center text-red-300">
             {errors.length} {errors.length === 1 ? "playlist" : "playlists"}{" "}
             could not be scanned:{" "}
-            {errors.map(e => e.reason.toString()).join(", ")}
+            {errors.map(e => e.playlist.name.toString()).join(", ")}
           </div>
         )}
         <div class="mb-8 mt-16 text-center">
