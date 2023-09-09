@@ -1,5 +1,6 @@
 import { SpotifyApi, Track } from "@spotify/web-api-ts-sdk"
 import { useEffect, useRef, useState } from "preact/hooks"
+import { getTracks } from "../../api"
 import { Checkbox, ExternalLink } from "../../components"
 import { PlaylistPlaceholderIcon } from "../../icons"
 import { ScannedPlaylist } from "../../types"
@@ -32,7 +33,8 @@ export default function PlaylistView({
       if (taylorsTracks == null) {
         ;(async () => {
           setTaylorsTracks(
-            await spotify.tracks.get(
+            await getTracks(
+              spotify,
               playlist.replacements.map(r => r.taylorsVersionIds[0]),
             ),
           )
@@ -52,7 +54,7 @@ export default function PlaylistView({
       ref={ref}
     >
       <div
-        class="sticky top-0 grid cursor-pointer grid-cols-[6rem_1fr_3rem] items-center gap-x-6 rounded-xl bg-[#212121] p-6 shadow-md shadow-neutral-950 hover:bg-neutral-800"
+        class="sticky top-0 grid cursor-pointer grid-cols-[6rem_1fr_1.5rem] items-center rounded-xl bg-[#212121] p-4 pr-5 shadow-md shadow-neutral-950 hover:bg-neutral-800 sm:p-6 sm:pr-12"
         onClick={() => onToggle()}
       >
         {playlist.images[0] ? (
@@ -63,26 +65,29 @@ export default function PlaylistView({
         ) : (
           <PlaylistPlaceholderIcon class="h-24 w-24" />
         )}
-        <div class="flex h-full flex-col justify-between">
+        <div class="mx-4 flex h-full min-w-0 flex-col justify-between sm:mx-6">
           <div></div>
-          <div class="text-2xl font-semibold sm:text-4xl">{playlist.name}</div>
+          <div class="overflow-clip text-ellipsis text-2xl font-semibold sm:text-4xl">
+            {playlist.name}
+          </div>
           <div class="text-sm text-neutral-400">
-            <span class="whitespace-nowrap">
-              <span class="mr-1">
+            <span class="block sm:inline">
+              <span>
                 {playlist.replacements.length}{" "}
                 {playlist.replacements.length === 1 ? "track" : "tracks"} found
                 out of {playlist.tracks.length}
-              </span>{" "}
-              <span class="mr-1">•</span>
+              </span>
+              &nbsp;
+              <span class="mx-1 hidden sm:inline">•</span>
             </span>{" "}
-            <span class="whitespace-nowrap">
+            <span class="block sm:inline">
               <ExternalLink href={playlist.external_urls.spotify}>
                 Open in Spotify
               </ExternalLink>
             </span>
           </div>
         </div>
-        <div class="flex items-center justify-start self-center">
+        <div class="flex items-center justify-end">
           <Checkbox
             class="h-6 w-6 cursor-pointer"
             checked={isAllSelected}

@@ -1,4 +1,5 @@
 import { SpotifyApi } from "@spotify/web-api-ts-sdk"
+import { removeItemsFromPlaylist } from "../api"
 import { Progress, SelectedPlaylist } from "../types"
 
 export async function replaceTracks(
@@ -16,22 +17,13 @@ export async function replaceTracks(
         r.position - 1,
       )
     }
-    const promises: Promise<void>[] = []
-    for (
-      let offset = 0;
-      offset < playlist.stolenIdsToRemove.length;
-      offset += 100
-    ) {
-      promises.push(
-        spotify.playlists.removeItemsFromPlaylist(playlist.id, {
-          tracks: playlist.stolenIdsToRemove
-            .slice(offset, offset + 100)
-            .map(id => ({ uri: `spotify:track:${id}` })),
-          snapshot_id: playlist.snapshot_id,
-        }),
+    ;(
+      await removeItemsFromPlaylist(
+        spotify,
+        playlist,
+        playlist.stolenIdsToRemove,
       )
-    }
-    ;(await Promise.allSettled(promises)).map(result => {
+    ).map(result => {
       if (result.status === "rejected") {
         console.error("Playlist remove stolen tracks failed:", result.reason)
       }

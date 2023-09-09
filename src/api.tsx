@@ -1,4 +1,4 @@
-import { Scopes, SpotifyApi } from "@spotify/web-api-ts-sdk"
+import { SpotifyApi, Track } from "@spotify/web-api-ts-sdk"
 import {
   IRedirectionStrategy,
   Page,
@@ -21,7 +21,11 @@ export const createSpotifyApi = (
     import.meta.env.PROD
       ? import.meta.env.VITE_SPOTIFY_REDIRECT_URI
       : "http://localhost:3000",
-    Scopes.playlistRead,
+    [
+      "playlist-read-private",
+      "playlist-modify-public",
+      "playlist-modify-private",
+    ],
     config,
   )
 }
@@ -69,4 +73,31 @@ export const getPlaylistWithTracks = async (
     tracks.push(item)
   }
   return { ...playlist, tracks }
+}
+
+export const getTracks = async (spotify: SpotifyApi, ids: string[]) => {
+  const tracks: Track[] = []
+  for (let offset = 0; offset < ids.length; offset += 50) {
+    tracks.push(...(await spotify.tracks.get(ids.slice(offset, offset + 50))))
+  }
+  return tracks
+}
+
+export const removeItemsFromPlaylist = async (
+  spotify: SpotifyApi,
+  playlist: { id: string; snapshot_id?: string },
+  trackIds: string[],
+) => {
+  const promises: Promise<void>[] = []
+  for (let offset = 0; offset < trackIds.length; offset += 100) {
+    promises.push(
+      spotify.playlists.removeItemsFromPlaylist(playlist.id, {
+        tracks: trackIds
+          .slice(offset, offset + 100)
+          .map(id => ({ uri: `spotify:track:${id}` })),
+        snapshot_id: playlist.snapshot_id,
+      }),
+    )
+  }
+  return await Promise.allSettled(promises)
 }

@@ -24,7 +24,7 @@ const getTrackReplacements = (
 ): TrackReplacements[] => {
   let replacements: TrackReplacements[] = []
   tracks.forEach((t, i) => {
-    if (t.track.type === "track") {
+    if (t.track && t.track.type === "track") {
       const track = t.track as Track
       const taylorsVersion = TAYLORS_VERSIONS[track.external_ids.isrc]
       if (taylorsVersion) {

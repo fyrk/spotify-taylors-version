@@ -111,14 +111,15 @@ const AppContent = ({
           onDoReplace={async selectedTracks => {
             setState("replacing")
             const selectedPlaylists: SelectedPlaylist[] = scanResult.playlists
-              .filter((_, i) => selectedTracks[i].size > 0)
-              .map((p, i) => ({
+              .map((p, i) => ({ p, s: selectedTracks[i] }))
+              .filter(({ s }) => s.size > 0)
+              .map(({ p, s }) => ({
                 id: p.id,
                 name: p.name,
                 snapshot_id: p.snapshot_id,
-                stolenIdsToRemove: Array.from(selectedTracks[i]),
+                stolenIdsToRemove: Array.from(s),
                 newTracks: p.replacements
-                  .filter(r => selectedTracks[i].has(r.stolen.id))
+                  .filter(r => s.has(r.stolen.id))
                   .map(r => ({
                     position: r.position,
                     taylorsVersionId: r.taylorsVersionIds[0],

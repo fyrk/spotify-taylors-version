@@ -38,7 +38,7 @@ export default function PlaylistEditor({
   )
 
   return (
-    <div class="w-full grow p-5 pt-12">
+    <div class="w-full grow p-3 pt-12">
       <div class="mx-auto w-full max-w-4xl">
         <div class="mb-12 text-center">
           <Button
@@ -49,7 +49,10 @@ export default function PlaylistEditor({
             {songsToReplace === 0 ? (
               "No songs selected"
             ) : (
-              <>Replace {songsToReplace || ""} songs</>
+              <>
+                Replace {songsToReplace || ""}{" "}
+                {songsToReplace === 1 ? "song" : "songs"}
+              </>
             )}
           </Button>
         </div>
