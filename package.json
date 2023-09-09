@@ -1,5 +1,7 @@
 {
-	"name": "example",
+	"name": "spotify-taylors-version",
+	"description": "Find and replace Taylor Swift’s stolen songs in your Spotify playlists",
+	"author": "Florian Rädiker",
 	"private": true,
 	"type": "module",
 	"scripts": {
