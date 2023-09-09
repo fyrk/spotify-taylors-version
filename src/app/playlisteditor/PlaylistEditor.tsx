@@ -1,19 +1,21 @@
 import { SpotifyApi } from "@spotify/web-api-ts-sdk"
 import { useMemo, useState } from "preact/hooks"
 import { Button } from "../../components"
-import { ScannedPlaylist } from "../../types"
+import { ScanResult } from "../../types"
 import PlaylistView from "./PlaylistView"
 import spotifyLogoGreen from "/img/spotify_logo_green.svg?url"
 
 export default function PlaylistEditor({
-  playlists,
+  scanResult,
   onDoReplace, // TODO
   spotify,
 }: {
-  playlists: ScannedPlaylist[]
+  scanResult: ScanResult
   onDoReplace: (selectedTracks: Set<string>[]) => void
   spotify: SpotifyApi
 }) {
+  const { playlists, errors } = scanResult
+
   const [extended, setExtended] = useState<string>(null)
   // for every playlist, set of all selected tracks
   // Spotify's API only supports removing all occurrences of the same track in a playlist
@@ -100,6 +102,13 @@ export default function PlaylistEditor({
             />
           ))}
         </div>
+        {errors.length > 0 && (
+          <div class="mt-10 text-center text-red-300">
+            {errors.length} {errors.length === 1 ? "playlist" : "playlists"}{" "}
+            could not be scanned:{" "}
+            {errors.map(e => e.reason.toString()).join(", ")}
+          </div>
+        )}
         <div class="mb-8 mt-16 text-center">
           {/* see https://developer.spotify.com/documentation/design#using-our-content */}
           <div>Music data from the official API of</div>

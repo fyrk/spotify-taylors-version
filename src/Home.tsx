@@ -8,7 +8,7 @@ export default function Home({
   onLogin,
 }: {
   authError: string
-  onLogin: () => void
+  onLogin: () => Promise<void>
 }) {
   const [isLoading, setIsLoading] = useState(false)
 
@@ -30,13 +30,13 @@ export default function Home({
         </div>
         <div class="mb-3">
           <Button
-            class="bg-spotify-green"
+            class="bg-spotify-green disabled:brightness-50"
             disabled={isLoading}
             onClick={async () => {
               if (isLoading) return
               setIsLoading(true)
               try {
-                onLogin()
+                await onLogin()
               } finally {
                 setIsLoading(false)
               }

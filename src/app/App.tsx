@@ -1,13 +1,8 @@
+import * as Sentry from "@sentry/react"
 import { SpotifyApi, User } from "@spotify/web-api-ts-sdk"
 import { useEffect, useState } from "preact/hooks"
-import { JSX } from "preact/jsx-runtime"
-import { BaseButton, Button, Scaffold } from "../components"
-import {
-  NO_PROGRESS,
-  Progress,
-  ScannedPlaylist,
-  SelectedPlaylist,
-} from "../types"
+import { BaseButton, Button, Fallback, Scaffold } from "../components"
+import { NO_PROGRESS, Progress, ScanResult, SelectedPlaylist } from "../types"
 import PlaylistEditor from "./playlisteditor/PlaylistEditor"
 import { replaceTracks } from "./replace"
 import { scanUserPlaylists } from "./scan"
@@ -22,38 +17,100 @@ export default function App({
 }) {
   const [user, setUser] = useState<User>(null)
 
+  return (
+    <Scaffold>
+      <header class="flex w-full items-center justify-between bg-neutral-800 px-4 py-4 shadow-lg shadow-neutral-950 sm:px-7 sm:py-6">
+        <div class="whitespace-nowrap text-2xl font-bold sm:text-4xl">
+          <div class="inline-block">
+            <img
+              src={noScooterCircle}
+              class="mr-3 inline-block h-[1.2em] w-[1.2em] align-text-bottom"
+            />
+          </div>
+          <div class="inline-block">Taylor’s Version</div>
+        </div>
+        <div>
+          <LogOutButton user={user} onLogout={onLogout} />
+        </div>
+      </header>
+      <Sentry.ErrorBoundary
+        fallback={({ error }) => {
+          if (
+            error instanceof Error &&
+            // @spotify/web-api-ts-sdk/src/responsevalidation/DefaultResponseValidator.ts:13
+            error.message.includes("The app has exceeded its rate limits")
+          ) {
+            return (
+              <Fallback
+                title="The app has exceeded Spotify’s rate limits"
+                text="Please wait some time and try again later"
+              />
+            )
+          }
+          return (
+            <Fallback
+              error={error instanceof Error ? error.toString() : null}
+            />
+          )
+        }}
+      >
+        <AppContent onGotUser={setUser} onLogout={onLogout} spotify={spotify} />
+      </Sentry.ErrorBoundary>
+    </Scaffold>
+  )
+}
+
+/**
+ * Move app's content here so error fallback still shows header and logout button.
+ */
+const AppContent = ({
+  onGotUser,
+  onLogout,
+  spotify,
+}: {
+  onGotUser: (user: User) => void
+  onLogout: () => void
+  spotify: SpotifyApi
+}) => {
+  const [asyncError, setAsyncError] = useState<Error>(null)
+  if (asyncError) {
+    throw asyncError
+  }
+
   const [state, setState] = useState<
     "scanning" | "selecting" | "replacing" | "finished"
   >("scanning")
   const [scanProgress, setScanProgress] = useState<Progress>(NO_PROGRESS)
-  const [playlists, setPlaylists] = useState<ScannedPlaylist[]>(null)
+  const [scanResult, setScanResult] = useState<ScanResult>(null)
 
   useEffect(() => {
     ;(async () => {
-      const user = await spotify.currentUser.profile()
-      setUser(user)
-      setPlaylists(await scanUserPlaylists(spotify, user, setScanProgress))
-      setState("selecting")
+      try {
+        const user = await spotify.currentUser.profile()
+        onGotUser(user)
+        setScanResult(await scanUserPlaylists(spotify, user, setScanProgress))
+        setState("selecting")
+      } catch (e) {
+        setAsyncError(e)
+      }
     })()
   }, [])
 
-  let content: JSX.Element
   switch (state) {
     case "scanning":
-      content = (
+      return (
         <ProgressDisplay
           title="Scanning your playlists"
           progress={scanProgress}
         />
       )
-      break
     case "selecting":
-      content = (
+      return (
         <PlaylistEditor
-          playlists={playlists}
+          scanResult={scanResult}
           onDoReplace={async selectedTracks => {
             setState("replacing")
-            const selectedPlaylists: SelectedPlaylist[] = playlists
+            const selectedPlaylists: SelectedPlaylist[] = scanResult.playlists
               .filter((_, i) => selectedTracks[i].size > 0)
               .map((p, i) => ({
                 id: p.id,
@@ -73,52 +130,27 @@ export default function App({
           spotify={spotify}
         />
       )
-      break
     case "replacing":
-      content = (
-        <ProgressDisplay title="Replacing songs" progress={scanProgress} />
-      )
-      break
+      return <ProgressDisplay title="Replacing songs" progress={scanProgress} />
     case "finished":
-      content = (
+      return (
         <div class="w-full text-center">
           <div class="mb-8 text-2xl">
             Your playlists have been updated to (Taylor’s Version)!
           </div>
-          <Button onClick={() => onLogout()}>Back to Home</Button>
+          <Button onClick={onLogout}>Back to Home</Button>
         </div>
       )
-      break
   }
-
-  return (
-    <Scaffold>
-      <header class="flex w-full items-center justify-between bg-neutral-800 px-4 py-4 shadow-lg shadow-neutral-950 sm:px-7 sm:py-6">
-        <div class="whitespace-nowrap text-2xl font-bold sm:text-4xl">
-          <div class="inline-block">
-            <img
-              src={noScooterCircle}
-              class="mr-3 inline-block h-[1.2em] w-[1.2em] align-text-bottom"
-            />
-          </div>
-          <div class="inline-block">Taylor’s Version</div>
-        </div>
-        <div>
-          <LogOutButton user={user} onLogout={onLogout} />
-        </div>
-      </header>
-      {content}
-    </Scaffold>
-  )
 }
 
-function LogOutButton({
+const LogOutButton = ({
   user,
   onLogout,
 }: {
   user: User
   onLogout: () => void
-}) {
+}) => {
   const profileImage =
     user && user.images.reduce((p, c) => (p.width < c.width ? c : p))
   return (

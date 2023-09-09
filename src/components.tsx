@@ -22,6 +22,24 @@ export const Scaffold = ({ children }) => (
   </main>
 )
 
+export const Fallback = ({
+  title,
+  text,
+  error,
+}: {
+  title?: string
+  text?: string
+  error?: string
+}) => (
+  <div class="flex h-screen flex-col items-center justify-center p-10 text-center">
+    <h1 class="mb-3 text-4xl">{title || "Something went wrong"}</h1>
+    <div class="text-lg text-gray-400">
+      {text || "Please try refreshing the page"}
+    </div>
+    {error && <small class="mt-6 text-red-300">{error}</small>}
+  </div>
+)
+
 export const ExternalLink = ({
   href,
   ...props

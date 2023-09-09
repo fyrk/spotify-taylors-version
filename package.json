@@ -10,12 +10,14 @@
 		"preview": "vite preview"
 	},
 	"dependencies": {
+		"@sentry/react": "^7.68.0",
 		"@spotify/web-api-ts-sdk": "^1.1.1",
 		"preact": "^10.17.1"
 	},
 	"devDependencies": {
 		"@darkobits/vite-plugin-favicons": "^0.3.0",
 		"@preact/preset-vite": "^2.5.0",
+		"@sentry/vite-plugin": "^2.7.1",
 		"autoprefixer": "^10.4.14",
 		"postcss": "^8.4.26",
 		"preact-router": "^4.1.1",

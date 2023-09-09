@@ -1,8 +1,10 @@
+import * as Sentry from "@sentry/react"
 import { IRedirectionStrategy, SpotifyApi } from "@spotify/web-api-ts-sdk"
 import { useEffect, useState } from "preact/hooks"
 import Home from "./Home"
 import { createSpotifyApi } from "./api"
 import App from "./app/App"
+import { Fallback } from "./components"
 
 export default function Main() {
   const [spotify, setSpotify] = useState<SpotifyApi>(null)
@@ -32,32 +34,39 @@ export default function Main() {
 
   if (spotify) {
     return (
-      <App
-        onLogout={() => {
-          spotify.logOut()
-          setSpotify(null)
-        }}
-        spotify={spotify}
-      />
+      <Sentry.ErrorBoundary fallback={<Fallback />}>
+        <App
+          onLogout={() => {
+            spotify.logOut()
+            setSpotify(null)
+          }}
+          spotify={spotify}
+        />
+      </Sentry.ErrorBoundary>
     )
   }
 
   return (
-    <Home
-      authError={authError}
-      onLogin={async () => {
-        try {
-          const sdk = createSpotifyApi()
-          const { authenticated } = await sdk.authenticate()
-          if (authenticated) {
-            // this should never be reached since authenticate redirects
-            setSpotify(sdk)
+    <Sentry.ErrorBoundary fallback={<Fallback />}>
+      <Home
+        authError={authError}
+        onLogin={async () => {
+          try {
+            setAuthError(null)
+            const sdk = createSpotifyApi()
+            const { authenticated } = await sdk.authenticate()
+            if (authenticated) {
+              // this should never be reached since authenticate redirects
+              setSpotify(sdk)
+            }
+          } catch (e) {
+            setAuthError(e.toString() || "")
+            // @ts-ignore
+            const error = new Error("Authenticating failed", { cause: e })
+            Sentry.captureException(error)
           }
-        } catch (e: Error | unknown) {
-          console.error(e)
-          setAuthError(e.toString() || "")
-        }
-      }}
-    />
+        }}
+      />
+    </Sentry.ErrorBoundary>
   )
 }

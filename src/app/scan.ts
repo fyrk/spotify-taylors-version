@@ -6,7 +6,12 @@ import {
   User,
 } from "@spotify/web-api-ts-sdk"
 import { getAllUserPlaylists, getPlaylistWithTracks } from "../api"
-import { Progress, ScannedPlaylist, TrackReplacements } from "../types"
+import {
+  Progress,
+  ScanError,
+  ScannedPlaylist,
+  TrackReplacements,
+} from "../types"
 import _TAYLORS_VERSIONS_JSON from "./taylorsversions.json"
 
 const TAYLORS_VERSIONS: {
@@ -37,7 +42,7 @@ export async function scanUserPlaylists(
   spotify: SpotifyApi,
   user: User,
   onProgress: (progress: Progress) => void,
-): Promise<ScannedPlaylist[]> {
+): Promise<{ playlists: ScannedPlaylist[]; errors: ScanError[] }> {
   let counter = 0
 
   const scanPlaylist = async (
@@ -58,24 +63,29 @@ export async function scanUserPlaylists(
       }
       return null
     } finally {
-      counter++
-      onProgress({ current: counter, total, text: playlist.name })
+      onProgress({ current: ++counter, total, text: playlist.name })
     }
   }
 
-  const promises = []
+  const playlists: SimplifiedPlaylist[] = []
+  const promises: Promise<ScannedPlaylist>[] = []
   for await (let { total, item } of getAllUserPlaylists(spotify)) {
+    playlists.push(item)
     promises.push(scanPlaylist(item, total))
   }
+  const results = await Promise.allSettled(promises)
 
-  return (await Promise.allSettled(promises))
-    .map(result => {
-      if (result.status === "fulfilled") {
-        return result.value
-      } else {
-        console.error("Playlist scan failed", result.reason)
-        return null
+  const scannedPlaylists: ScannedPlaylist[] = []
+  const errors: ScanError[] = []
+  results.forEach((result, i) => {
+    if (result.status === "fulfilled") {
+      if (result.value != null) {
+        scannedPlaylists.push(result.value)
       }
-    })
-    .filter(p => p != null)
+    } else {
+      console.error("Playlist scan failed", result.reason)
+      errors.push({ playlist: playlists[i], reason: result.reason })
+    }
+  })
+  return { playlists: scannedPlaylists, errors }
 }

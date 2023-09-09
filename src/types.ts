@@ -3,6 +3,7 @@ import {
   Followers,
   Image,
   PlaylistedTrack,
+  SimplifiedPlaylist,
   Track,
   UserReference,
 } from "@spotify/web-api-ts-sdk"
@@ -60,6 +61,16 @@ export interface SelectedPlaylist {
 export interface TrackInsert {
   position: number
   taylorsVersionId: string
+}
+
+export interface ScanResult {
+  playlists: ScannedPlaylist[]
+  errors: ScanError[]
+}
+
+export interface ScanError {
+  playlist: SimplifiedPlaylist
+  reason: any
 }
 
 /**
