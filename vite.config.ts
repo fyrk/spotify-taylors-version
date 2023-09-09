@@ -17,10 +17,14 @@ export default defineConfig(({ command, mode }) => {
         },
       }),
       sentryVitePlugin({
+        telemetry: false,
         org: env.SENTRY_ORG,
         project: env.SENTRY_PROJECT,
         url: env.SENTRY_URL,
         authToken: env.SENTRY_AUTH_TOKEN,
+        release: {
+          uploadLegacySourcemaps: ["dist"],
+        },
       }),
     ],
 
