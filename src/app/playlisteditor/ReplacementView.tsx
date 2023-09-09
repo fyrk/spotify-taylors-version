@@ -38,7 +38,7 @@ export default function ReplacementView({
           />
         </svg>
       </div>
-      <div class="col-span-4 px-3 sm:col-span-2 sm:px-0">
+      <div class="col-span-4 px-3 sm:col-span-2 sm:pl-0">
         <TrackView track={taylorsTrack} />
       </div>
       <div class="col-start-7 row-span-2 row-start-1 flex h-12 w-6 items-center self-center">

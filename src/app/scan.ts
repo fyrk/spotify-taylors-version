@@ -16,7 +16,7 @@ import {
 import _TAYLORS_VERSIONS_JSON from "./taylorsversions.json"
 
 const TAYLORS_VERSIONS: {
-  [key: string]: { replacements: Array<{ id: string }> }
+  [key: string]: { replacements: string[] }
 } = _TAYLORS_VERSIONS_JSON
 
 const getTrackReplacements = (
@@ -31,7 +31,7 @@ const getTrackReplacements = (
         replacements.push({
           position: i + 1,
           stolen: track,
-          taylorsVersionIds: taylorsVersion.replacements.map(r => r.id),
+          taylorsVersionIds: taylorsVersion.replacements,
         })
       }
     }
