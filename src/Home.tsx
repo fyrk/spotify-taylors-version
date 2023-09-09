@@ -1,5 +1,5 @@
 import { useState } from "preact/hooks"
-import { ExternalLink, Scaffold } from "./components"
+import { Button, ExternalLink, Scaffold } from "./components"
 import noScooterCircle from "/img/no_scooter_circle.svg?url"
 import spotifyIconWhite from "/img/spotify_icon_white.svg?url"
 
@@ -29,8 +29,8 @@ export default function Home({
           playlists
         </div>
         <div class="mb-3">
-          <button
-            class="whitespace-nowrap rounded-full bg-spotify-green p-5"
+          <Button
+            class="bg-spotify-green"
             disabled={isLoading}
             onClick={async () => {
               if (isLoading) return
@@ -42,11 +42,11 @@ export default function Home({
               }
             }}
           >
-            <span class="flex items-center gap-4 text-2xl">
+            <span class="flex items-center gap-4">
               <img src={spotifyIconWhite} class="h-[1.5em] w-[1.5em]" />
               Log in with Spotify
             </span>
-          </button>
+          </Button>
           {authError != null && (
             <div class="mt-2 text-lg text-red-300">
               Authentication failed. Please try again.

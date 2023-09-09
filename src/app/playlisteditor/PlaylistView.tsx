@@ -52,7 +52,7 @@ export default function PlaylistView({
       ref={ref}
     >
       <div
-        class="sticky top-0 grid cursor-pointer grid-cols-[6rem_1fr_3rem] items-baseline gap-x-6 rounded-xl bg-[#212121] p-6 shadow-md shadow-neutral-950 hover:bg-neutral-800"
+        class="sticky top-0 grid cursor-pointer grid-cols-[6rem_1fr_3rem] items-center gap-x-6 rounded-xl bg-[#212121] p-6 shadow-md shadow-neutral-950 hover:bg-neutral-800"
         onClick={() => onToggle()}
       >
         {playlist.images[0] ? (
@@ -63,16 +63,19 @@ export default function PlaylistView({
         ) : (
           <PlaylistPlaceholderIcon class="h-24 w-24" />
         )}
-
-        <div class="flex h-full flex-col justify-between self-center">
+        <div class="flex h-full flex-col justify-between">
           <div></div>
           <div class="text-2xl font-semibold sm:text-4xl">{playlist.name}</div>
           <div class="text-sm text-neutral-400">
-            <span class="mr-1">
-              {playlist.replacements.length} tracks found
+            <span class="whitespace-nowrap">
+              <span class="mr-1">
+                {playlist.replacements.length}{" "}
+                {playlist.replacements.length === 1 ? "track" : "tracks"} found
+                out of {playlist.tracks.length}
+              </span>{" "}
+              <span class="mr-1">•</span>
             </span>{" "}
-            •{" "}
-            <span class="ml-1">
+            <span class="whitespace-nowrap">
               <ExternalLink href={playlist.external_urls.spotify}>
                 Open in Spotify
               </ExternalLink>

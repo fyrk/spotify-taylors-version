@@ -1,4 +1,3 @@
-import { ComponentChildren } from "preact"
 import { JSX } from "preact/jsx-runtime"
 import { HeartIcon } from "./icons"
 
@@ -25,11 +24,9 @@ export const Scaffold = ({ children }) => (
 
 export const ExternalLink = ({
   href,
-  children,
   ...props
 }: {
   href: string
-  children: ComponentChildren
 } & JSX.IntrinsicElements["a"]) => (
   <a
     class="text-accent hover:underline"
@@ -37,10 +34,31 @@ export const ExternalLink = ({
     target="_blank"
     rel="noopener noreferrer"
     {...props}
-    children={children}
   />
 )
 
 export const Checkbox = (props: JSX.IntrinsicElements["input"]) => (
   <input type="checkbox" {...props} class={"accent-accent " + props.class} />
+)
+
+export const BaseButton = (props: JSX.IntrinsicElements["button"]) => (
+  <button
+    {...props}
+    class={
+      "whitespace-nowrap rounded-full " +
+      props.class +
+      " hover:enabled:brightness-[1.065]"
+    }
+  />
+)
+
+export const Button = (props: JSX.IntrinsicElements["button"]) => (
+  <button
+    {...props}
+    class={
+      "whitespace-nowrap rounded-full bg-accent p-5 text-2xl shadow-md shadow-neutral-950 " +
+      props.class +
+      " hover:enabled:brightness-[1.065]"
+    }
+  />
 )

@@ -1,5 +1,6 @@
 import { SpotifyApi } from "@spotify/web-api-ts-sdk"
-import { useState } from "preact/hooks"
+import { useMemo, useState } from "preact/hooks"
+import { Button } from "../../components"
 import { ScannedPlaylist } from "../../types"
 import PlaylistView from "./PlaylistView"
 import spotifyLogoGreen from "/img/spotify_logo_green.svg?url"
@@ -10,7 +11,7 @@ export default function PlaylistEditor({
   spotify,
 }: {
   playlists: ScannedPlaylist[]
-  onDoReplace: (playlists: ScannedPlaylist[]) => void
+  onDoReplace: (selectedTracks: Set<string>[]) => void
   spotify: SpotifyApi
 }) {
   const [extended, setExtended] = useState<string>(null)
@@ -20,12 +21,38 @@ export default function PlaylistEditor({
     playlists.map(p => new Set(p.replacements.map(r => r.stolen.id))),
   )
 
+  const countItems = <T,>(a: Array<T>, f: (x: T) => boolean): number =>
+    a.reduce((sum, x) => (f(x) ? sum + 1 : sum), 0)
+
+  const songsToReplace = useMemo(
+    () =>
+      playlists.reduce(
+        (sum, p, i) =>
+          sum +
+          countItems(p.replacements, r => selectedTracks[i].has(r.stolen.id)),
+        0,
+      ),
+    [playlists, selectedTracks],
+  )
+
   return (
-    <div class="w-full grow p-5">
+    <div class="w-full grow p-5 pt-12">
       <div class="mx-auto w-full max-w-4xl">
-        {/* TODO: add button */}
+        <div class="mb-12 text-center">
+          <Button
+            class="bg-accent disabled:bg-neutral-600"
+            onClick={() => onDoReplace(selectedTracks)}
+            disabled={songsToReplace === 0}
+          >
+            {songsToReplace === 0 ? (
+              "No songs selected"
+            ) : (
+              <>Replace {songsToReplace || ""} songs</>
+            )}
+          </Button>
+        </div>
         <div class="mb-10 text-center text-lg sm:text-xl">
-          You can also choose which songs you would like to replace.
+          Choose which songs you would like to replace below.
           <br />
           Tap on a playlist to select individual tracks.
         </div>

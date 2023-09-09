@@ -25,11 +25,17 @@ interface PlaylistBase {
   uri: string
 }
 
+/**
+ * Playlist with complete track information
+ */
 export interface PlaylistWithTracks extends PlaylistBase {
   tracks: PlaylistedTrack[]
 }
 
-export interface ScannedPlaylist extends PlaylistBase {
+/**
+ * Playlist with stolen tracks and their possible replacements
+ */
+export interface ScannedPlaylist extends PlaylistWithTracks {
   replacements: TrackReplacements[]
 }
 
@@ -39,8 +45,34 @@ export interface TrackReplacements {
   taylorsVersionIds: string[]
 }
 
+/**
+ * Playlist with stolen tracks to remove and replacements to insert
+ * @property newTracks - replacement tracks to insert, ascending by position
+ */
+export interface SelectedPlaylist {
+  id: string
+  name: string
+  snapshot_id: string
+  stolenIdsToRemove: string[]
+  newTracks: TrackInsert[]
+}
+
+export interface TrackInsert {
+  position: number
+  taylorsVersionId: string
+}
+
+/**
+ * Progress of a task. `total=0` means the task has just started and progress is unknown.
+ */
 export interface Progress {
   current: number
   total: number
   text: string
+}
+
+export const NO_PROGRESS: Progress = {
+  current: 0,
+  total: 0,
+  text: "",
 }

@@ -64,7 +64,6 @@ export async function scanUserPlaylists(
   }
 
   const promises = []
-
   for await (let { total, item } of getAllUserPlaylists(spotify)) {
     promises.push(scanPlaylist(item, total))
   }
@@ -74,7 +73,7 @@ export async function scanUserPlaylists(
       if (result.status === "fulfilled") {
         return result.value
       } else {
-        console.error("Playlist scan failed")
+        console.error("Playlist scan failed", result.reason)
         return null
       }
     })
