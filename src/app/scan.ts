@@ -85,13 +85,11 @@ export async function scanUserPlaylists(
       }
     } else {
       errors.push({ playlist: playlists[i], reason: result.reason })
-      ;(async () => {
-        // @ts-ignore
-        const error = new Error("Playlist scan failed", {
-          cause: result.reason,
-        })
-        Sentry.captureException(error)
-      })()
+      // @ts-ignore
+      const error = new Error("Playlist scan failed", {
+        cause: result.reason,
+      })
+      Sentry.captureException(error)
     }
   })
   return { playlists: scannedPlaylists, errors }

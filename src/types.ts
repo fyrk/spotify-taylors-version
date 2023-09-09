@@ -73,6 +73,11 @@ export interface ScanError {
   reason: any
 }
 
+export interface ReplaceError {
+  playlist: SelectedPlaylist
+  reason: any
+}
+
 /**
  * Progress of a task. `total=0` means the task has just started and progress is unknown.
  */

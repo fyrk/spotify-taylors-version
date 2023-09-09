@@ -95,9 +95,10 @@ export const removeItemsFromPlaylist = async (
         tracks: trackIds
           .slice(offset, offset + 100)
           .map(id => ({ uri: `spotify:track:${id}` })),
-        snapshot_id: playlist.snapshot_id,
+        // passing snapshot_id for large playlists causes 500 Internal Server Error
+        //snapshot_id: playlist.snapshot_id,
       }),
     )
   }
-  return await Promise.allSettled(promises)
+  return await Promise.all(promises)
 }

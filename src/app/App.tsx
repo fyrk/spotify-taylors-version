@@ -2,7 +2,13 @@ import * as Sentry from "@sentry/react"
 import { SpotifyApi, User } from "@spotify/web-api-ts-sdk"
 import { useEffect, useState } from "preact/hooks"
 import { BaseButton, Button, Fallback, Scaffold } from "../components"
-import { NO_PROGRESS, Progress, ScanResult, SelectedPlaylist } from "../types"
+import {
+  NO_PROGRESS,
+  Progress,
+  ReplaceError,
+  ScanResult,
+  SelectedPlaylist,
+} from "../types"
 import PlaylistEditor from "./playlisteditor/PlaylistEditor"
 import { replaceTracks } from "./replace"
 import { scanUserPlaylists } from "./scan"
@@ -80,15 +86,16 @@ const AppContent = ({
   const [state, setState] = useState<
     "scanning" | "selecting" | "replacing" | "finished"
   >("scanning")
-  const [scanProgress, setScanProgress] = useState<Progress>(NO_PROGRESS)
+  const [progress, setProgress] = useState<Progress>(NO_PROGRESS)
   const [scanResult, setScanResult] = useState<ScanResult>(null)
+  const [replaceErrors, setReplaceErrors] = useState<ReplaceError[]>([])
 
   useEffect(() => {
     ;(async () => {
       try {
         const user = await spotify.currentUser.profile()
         onGotUser(user)
-        setScanResult(await scanUserPlaylists(spotify, user, setScanProgress))
+        setScanResult(await scanUserPlaylists(spotify, user, setProgress))
         setState("selecting")
       } catch (e) {
         setAsyncError(e)
@@ -99,16 +106,14 @@ const AppContent = ({
   switch (state) {
     case "scanning":
       return (
-        <ProgressDisplay
-          title="Scanning your playlists"
-          progress={scanProgress}
-        />
+        <ProgressDisplay title="Scanning your playlists" progress={progress} />
       )
     case "selecting":
       return (
         <PlaylistEditor
           scanResult={scanResult}
           onDoReplace={async selectedTracks => {
+            setProgress(NO_PROGRESS)
             setState("replacing")
             const selectedPlaylists: SelectedPlaylist[] = scanResult.playlists
               .map((p, i) => ({ p, s: selectedTracks[i] }))
@@ -125,21 +130,33 @@ const AppContent = ({
                     taylorsVersionId: r.taylorsVersionIds[0],
                   })),
               }))
-            await replaceTracks(spotify, selectedPlaylists, setScanProgress)
+            setReplaceErrors(
+              await replaceTracks(spotify, selectedPlaylists, setProgress),
+            )
             setState("finished")
           }}
           spotify={spotify}
         />
       )
     case "replacing":
-      return <ProgressDisplay title="Replacing songs" progress={scanProgress} />
+      return <ProgressDisplay title="Replacing songs" progress={progress} />
     case "finished":
       return (
-        <div class="w-full text-center">
-          <div class="mb-8 text-2xl">
-            Your playlists have been updated to (Taylor’s Version)!
+        <div class="w-full p-6">
+          <div class="mx-auto w-full max-w-2xl text-center">
+            <div class="mb-8 text-2xl">
+              Your playlists have been updated to (Taylor’s Version)!
+            </div>
+            <Button onClick={onLogout}>Back to Home</Button>
+            {replaceErrors.length > 0 && (
+              <div class="mt-10 text-center text-red-300">
+                Tracks in the following{" "}
+                {replaceErrors.length === 1 ? "playlist" : "playlists"} may not
+                have been fully updated:{" "}
+                {replaceErrors.map(e => e.playlist.name.toString()).join(", ")}
+              </div>
+            )}
           </div>
-          <Button onClick={onLogout}>Back to Home</Button>
         </div>
       )
   }
