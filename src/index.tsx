@@ -9,6 +9,9 @@ if (import.meta.env.VITE_SENTRY_DSN) {
     environment: import.meta.env.DEV ? "development" : "production",
     integrations: [new Sentry.BrowserTracing()],
     tracesSampleRate: 1.0,
+
+    autoSessionTracking: false,
+    sendClientReports: false,
   })
 }
 
