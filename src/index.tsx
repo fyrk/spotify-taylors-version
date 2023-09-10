@@ -1,18 +1,10 @@
-import * as Sentry from "@sentry/react"
 import { render } from "preact"
 import Main from "./Main"
+import setupPlausible from "./helpers/plausible"
+import setupSentry from "./helpers/sentry"
 import "./index.css"
 
-if (import.meta.env.VITE_SENTRY_DSN) {
-  Sentry.init({
-    dsn: import.meta.env.VITE_SENTRY_DSN,
-    environment: import.meta.env.DEV ? "development" : "production",
-    integrations: [new Sentry.BrowserTracing()],
-    tracesSampleRate: 1.0,
-
-    autoSessionTracking: false,
-    sendClientReports: false,
-  })
-}
+setupPlausible()
+setupSentry()
 
 render(<Main />, document.getElementById("app"))

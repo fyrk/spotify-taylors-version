@@ -5,6 +5,7 @@ import Home from "./Home"
 import { createSpotifyApi } from "./api"
 import App from "./app/App"
 import { Fallback } from "./components"
+import { trackPlausibleEvent } from "./helpers/plausible"
 
 export default function Main() {
   const [spotify, setSpotify] = useState<SpotifyApi>(null)
@@ -25,6 +26,7 @@ export default function Main() {
         const { authenticated } = await sdk.authenticate()
         if (authenticated && !spotify) {
           setSpotify(sdk)
+          trackPlausibleEvent("Authenticated")
         }
       } catch (e) {
         console.info("User is not authenticated", e)
@@ -36,9 +38,10 @@ export default function Main() {
     return (
       <Sentry.ErrorBoundary fallback={<Fallback />}>
         <App
-          onLogout={() => {
+          onLogout={state => {
             spotify.logOut()
             setSpotify(null)
+            trackPlausibleEvent("Logout", { props: { state } })
           }}
           spotify={spotify}
         />
@@ -51,6 +54,7 @@ export default function Main() {
       <Home
         authError={authError}
         onLogin={async () => {
+          trackPlausibleEvent("Attempt Login")
           try {
             setAuthError(null)
             const sdk = createSpotifyApi()
@@ -64,6 +68,7 @@ export default function Main() {
             // @ts-ignore
             const error = new Error("Authenticating failed", { cause: e })
             Sentry.captureException(error)
+            trackPlausibleEvent("Authentication failed")
           }
         }}
       />

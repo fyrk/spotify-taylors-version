@@ -18,10 +18,13 @@ export default function App({
   onLogout,
   spotify,
 }: {
-  onLogout: () => void
+  onLogout: (state: string) => void
   spotify: SpotifyApi
 }) {
   const [user, setUser] = useState<User>(null)
+  const [state, setState] = useState<
+    "scanning" | "selecting" | "replacing" | "finished"
+  >("scanning")
 
   return (
     <Scaffold>
@@ -36,7 +39,7 @@ export default function App({
           <div class="inline-block">Taylor’s Version</div>
         </div>
         <div>
-          <LogOutButton user={user} onLogout={onLogout} />
+          <LogOutButton user={user} onLogout={() => onLogout(state)} />
         </div>
       </header>
       <Sentry.ErrorBoundary
@@ -60,7 +63,13 @@ export default function App({
           )
         }}
       >
-        <AppContent onGotUser={setUser} onLogout={onLogout} spotify={spotify} />
+        <AppContent
+          state={state}
+          setState={setState}
+          onGotUser={setUser}
+          onLogout={() => onLogout(state)}
+          spotify={spotify}
+        />
       </Sentry.ErrorBoundary>
     </Scaffold>
   )
@@ -70,10 +79,14 @@ export default function App({
  * Move app's content here so error fallback still shows header and logout button.
  */
 const AppContent = ({
+  state,
+  setState,
   onGotUser,
   onLogout,
   spotify,
 }: {
+  state: "scanning" | "selecting" | "replacing" | "finished"
+  setState: (state: "scanning" | "selecting" | "replacing" | "finished") => void
   onGotUser: (user: User) => void
   onLogout: () => void
   spotify: SpotifyApi
@@ -83,9 +96,6 @@ const AppContent = ({
     throw asyncError
   }
 
-  const [state, setState] = useState<
-    "scanning" | "selecting" | "replacing" | "finished"
-  >("scanning")
   const [progress, setProgress] = useState<Progress>(NO_PROGRESS)
   const [scanResult, setScanResult] = useState<ScanResult>(null)
   const [replaceErrors, setReplaceErrors] = useState<ReplaceError[]>([])
