@@ -1,5 +1,6 @@
 import { faviconsPlugin } from "@darkobits/vite-plugin-favicons"
 import preact from "@preact/preset-vite"
+import replace from "@rollup/plugin-replace"
 import { sentryVitePlugin } from "@sentry/vite-plugin"
 import { defineConfig, loadEnv } from "vite"
 
@@ -35,6 +36,15 @@ export default defineConfig(({ command, mode }) => {
     },
     build: {
       sourcemap: true,
+      rollupOptions: {
+        plugins: [
+          replace({
+            preventAssignment: true,
+            // https://docs.sentry.io/platforms/javascript/guides/react/configuration/tree-shaking/
+            __SENTRY_DEBUG__: false,
+          }),
+        ],
+      },
     },
   }
 })
