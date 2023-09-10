@@ -93,9 +93,7 @@ const AppContent = ({
   useEffect(() => {
     ;(async () => {
       try {
-        const user = await spotify.currentUser.profile()
-        onGotUser(user)
-        setScanResult(await scanUserPlaylists(spotify, user, setProgress))
+        setScanResult(await scanUserPlaylists(spotify, onGotUser, setProgress))
         setState("selecting")
       } catch (e) {
         setAsyncError(e)

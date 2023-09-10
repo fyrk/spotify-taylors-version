@@ -41,16 +41,23 @@ const getTrackReplacements = (
 
 export async function scanUserPlaylists(
   spotify: SpotifyApi,
-  user: User,
+  onGotUser: (user: User) => void,
   onProgress: (progress: Progress) => void,
 ): Promise<{ playlists: ScannedPlaylist[]; errors: ScanError[] }> {
   let counter = 0
+
+  const userPromise = (async () => {
+    const user = await spotify.currentUser.profile()
+    onGotUser(user)
+    return user
+  })()
 
   const scanPlaylist = async (
     playlist: SimplifiedPlaylist,
     total: number,
   ): Promise<ScannedPlaylist> => {
     try {
+      const user = await userPromise
       if (playlist.owner.uri === user.uri) {
         const playlistWithTracks = await getPlaylistWithTracks(
           spotify,
