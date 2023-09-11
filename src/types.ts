@@ -8,6 +8,25 @@ import {
   UserReference,
 } from "@spotify/web-api-ts-sdk"
 
+/**
+ * Information on a stolen track and possible replacements
+ */
+export interface StolenReplacements {
+  ids: string[]
+  isLive?: boolean
+  isRemix?: boolean
+}
+
+export interface ScanResult {
+  playlists: ScannedPlaylist[]
+  errors: ScanError[]
+}
+
+export interface ScanError {
+  playlist: SimplifiedPlaylist
+  reason: any
+}
+
 interface PlaylistBase {
   // not exported in @spotify/web-api-ts-sdk/dist/mjs/types
   collaborative: boolean
@@ -37,20 +56,20 @@ export interface PlaylistWithTracks extends PlaylistBase {
  * Playlist with stolen tracks and their possible replacements
  */
 export interface ScannedPlaylist extends PlaylistWithTracks {
-  replacements: TrackReplacements[]
+  stolenTracks: StolenTrack[]
 }
 
-export interface TrackReplacements {
+export interface StolenTrack {
   position: number
-  stolen: Track
-  taylorsVersionIds: string[]
+  track: Track
+  replacements: StolenReplacements
 }
 
 /**
  * Playlist with stolen tracks to remove and replacements to insert
  * @property newTracks - replacement tracks to insert, ascending by position
  */
-export interface SelectedPlaylist {
+export interface PlaylistSelection {
   id: string
   name: string
   snapshot_id: string
@@ -63,18 +82,8 @@ export interface TrackInsert {
   taylorsVersionId: string
 }
 
-export interface ScanResult {
-  playlists: ScannedPlaylist[]
-  errors: ScanError[]
-}
-
-export interface ScanError {
-  playlist: SimplifiedPlaylist
-  reason: any
-}
-
 export interface ReplaceError {
-  playlist: SelectedPlaylist
+  playlist: PlaylistSelection
   reason: any
 }
 

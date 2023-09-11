@@ -1,5 +1,5 @@
+import { HeartIcon } from "@heroicons/react/24/solid"
 import { JSX } from "preact/jsx-runtime"
-import { HeartIcon } from "./icons"
 
 export const Scaffold = ({ children }) => (
   <main class="flex h-full flex-col items-center justify-between">

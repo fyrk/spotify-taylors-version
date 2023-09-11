@@ -1,13 +1,21 @@
-import { SpotifyApi } from "@spotify/web-api-ts-sdk"
+import { SpotifyApi, Track } from "@spotify/web-api-ts-sdk"
 import { useMemo, useState } from "preact/hooks"
+import { TrackCache } from "../../api"
 import { Button } from "../../components"
 import { ScanResult } from "../../types"
 import PlaylistView from "./PlaylistView"
 import spotifyLogoGreen from "/img/spotify_logo_green.svg?url"
 
+export interface StolenTrackViewData {
+  position: number
+  stolen: Track
+  tv: Track | null
+  hasMultipleReplacements: boolean
+}
+
 export default function PlaylistEditor({
   scanResult,
-  onDoReplace, // TODO
+  onDoReplace,
   spotify,
 }: {
   scanResult: ScanResult
@@ -16,25 +24,51 @@ export default function PlaylistEditor({
 }) {
   const { playlists, errors } = scanResult
 
-  const [extended, setExtended] = useState<string>(null)
+  const [expanded, setExpanded] = useState<string>(null)
+
   // for every playlist, set of all selected tracks
   // Spotify's API only supports removing all occurrences of the same track in a playlist
   const [selectedTracks, setSelectedTracks] = useState<Set<string>[]>(
-    playlists.map(p => new Set(p.replacements.map(r => r.stolen.id))),
+    playlists.map(p => new Set(p.stolenTracks.map(r => r.track.id))),
   )
 
-  const countItems = <T,>(a: Array<T>, f: (x: T) => boolean): number =>
-    a.reduce((sum, x) => (f(x) ? sum + 1 : sum), 0)
+  const songsToReplaceCount = useMemo(() => {
+    const countItems = <T,>(a: Array<T>, p: (x: T) => boolean): number =>
+      a.reduce((sum, x) => (p(x) ? sum + 1 : sum), 0)
+    return playlists.reduce(
+      (sum, p, i) =>
+        sum +
+        countItems(p.stolenTracks, s => selectedTracks[i].has(s.track.id)),
+      0,
+    )
+  }, [playlists, selectedTracks])
 
-  const songsToReplace = useMemo(
+  const [replacementEdit, setReplacementEdit] = useState<{
+    playlistIdx: number
+    stolenIdx: number
+  } | null>(null)
+
+  const [selectedReplacements, setSelectedReplacements] = useState<string[][]>(
+    playlists.map(p => p.stolenTracks.map(s => s.replacements.ids[0])),
+  )
+
+  const trackCache = useState(new TrackCache(spotify))[0]
+  // for every playlist, whether TV tracks are in cache
+  const [hasLoadedTvTracks, setHasLoadedTvTracks] = useState<boolean[]>(
+    Array(playlists.length).fill(false),
+  )
+
+  const stolenTrackViewData = useMemo(
     () =>
-      playlists.reduce(
-        (sum, p, i) =>
-          sum +
-          countItems(p.replacements, r => selectedTracks[i].has(r.stolen.id)),
-        0,
+      playlists.map((p, pi) =>
+        p.stolenTracks.map((s, si) => ({
+          position: s.position,
+          stolen: s.track,
+          tv: trackCache.tryGet(selectedReplacements[pi][si]),
+          hasMultipleReplacements: s.replacements.ids.length > 1,
+        })),
       ),
-    [playlists, selectedTracks],
+    [playlists, trackCache, selectedReplacements, hasLoadedTvTracks],
   )
 
   return (
@@ -44,14 +78,14 @@ export default function PlaylistEditor({
           <Button
             class="bg-accent disabled:bg-neutral-600"
             onClick={() => onDoReplace(selectedTracks)}
-            disabled={songsToReplace === 0}
+            disabled={songsToReplaceCount === 0}
           >
-            {songsToReplace === 0 ? (
+            {songsToReplaceCount === 0 ? (
               "No songs selected"
             ) : (
               <>
-                Replace {songsToReplace || ""}{" "}
-                {songsToReplace === 1 ? "song" : "songs"}
+                Replace {songsToReplaceCount || ""}{" "}
+                {songsToReplaceCount === 1 ? "song" : "songs"}
               </>
             )}
           </Button>
@@ -62,23 +96,35 @@ export default function PlaylistEditor({
           Tap on a playlist to select individual tracks.
         </div>
         <div>
-          {playlists.map((playlist, playlistIndex) => (
+          {playlists.map((p, pi) => (
             <PlaylistView
-              playlist={playlist}
-              selection={selectedTracks[playlistIndex]}
-              isExtended={extended === playlist.id}
-              onToggle={() =>
-                extended === playlist.id
-                  ? setExtended(null)
-                  : setExtended(playlist.id)
-              }
+              playlist={p}
+              stolenTracks={stolenTrackViewData[pi]}
+              selection={selectedTracks[pi]}
+              isExpanded={expanded === p.id}
+              onToggle={() => {
+                if (expanded === p.id) {
+                  setExpanded(null)
+                } else {
+                  setExpanded(p.id)
+                  trackCache
+                    .getMany(p.stolenTracks.map(s => s.replacements.ids).flat())
+                    .then(() => {
+                      setHasLoadedTvTracks(hlt => {
+                        const newHlt = [...hlt]
+                        newHlt[pi] = true
+                        return newHlt
+                      })
+                    })
+                }
+              }}
               onSelectPlaylist={(selected: boolean) => {
                 setSelectedTracks(
                   selectedTracks.map((s, i) =>
-                    i === playlistIndex
+                    i === pi
                       ? selected
                         ? new Set(
-                            playlists[i].replacements.map(r => r.stolen.id),
+                            playlists[i].stolenTracks.map(r => r.track.id),
                           )
                         : new Set()
                       : s,
@@ -93,7 +139,7 @@ export default function PlaylistEditor({
                 }
                 setSelectedTracks(
                   selectedTracks.map((s, i) =>
-                    i === playlistIndex
+                    i === pi
                       ? selected
                         ? new Set(s).add(trackId)
                         : setRemove(s, trackId)
@@ -101,6 +147,9 @@ export default function PlaylistEditor({
                   ),
                 )
               }}
+              onOpenReplacementEditor={(stolenIdx: number) =>
+                setReplacementEdit({ playlistIdx: pi, stolenIdx })
+              }
               spotify={spotify}
             />
           ))}
@@ -122,6 +171,8 @@ export default function PlaylistEditor({
           />
         </div>
       </div>
+
+      {/* dialog for track replacement editor */}
     </div>
   )
 }

@@ -1,51 +1,39 @@
-import { SpotifyApi, Track } from "@spotify/web-api-ts-sdk"
-import { useEffect, useRef, useState } from "preact/hooks"
-import { getTracks } from "../../api"
+import { SpotifyApi } from "@spotify/web-api-ts-sdk"
+import { useEffect, useRef } from "preact/hooks"
 import { Checkbox, ExternalLink } from "../../components"
 import { PlaylistPlaceholderIcon } from "../../icons"
-import { ScannedPlaylist } from "../../types"
-import ReplacementView from "./ReplacementView"
+import { PlaylistWithTracks } from "../../types"
+import { StolenTrackViewData } from "./PlaylistEditor"
+import StolenTrackView from "./StolenTrackView"
 
 export default function PlaylistView({
   playlist,
+  stolenTracks,
   selection,
-  isExtended,
+  isExpanded: isExtended,
   onToggle,
   onSelectPlaylist,
   onSelectTrack,
+  onOpenReplacementEditor,
   spotify,
 }: {
-  playlist: ScannedPlaylist
+  playlist: PlaylistWithTracks
+  stolenTracks: StolenTrackViewData[]
   selection: Set<string>
-  isExtended: boolean
+  isExpanded: boolean
   onToggle: () => void
   onSelectPlaylist: (selected: boolean) => void
   onSelectTrack: (trackId: string, selected: boolean) => void
+  onOpenReplacementEditor: (stolenIdx: number) => void
   spotify: SpotifyApi
 }) {
-  const [taylorsTracks, setTaylorsTracks] = useState<Track[]>(null) // lazy-load as soon as playlist is extended
-
   const ref = useRef<HTMLDivElement>()
 
   useEffect(() => {
-    if (isExtended) {
-      ref.current.scrollIntoView({ behavior: "smooth" })
-      if (taylorsTracks == null) {
-        ;(async () => {
-          setTaylorsTracks(
-            await getTracks(
-              spotify,
-              playlist.replacements.map(r => r.taylorsVersionIds[0]),
-            ),
-          )
-        })()
-      }
-    }
+    if (isExtended) ref.current.scrollIntoView({ behavior: "smooth" })
   }, [isExtended])
 
-  const isAllSelected = playlist.replacements.every(r =>
-    selection.has(r.stolen.id),
-  )
+  const isAllSelected = stolenTracks.every(r => selection.has(r.stolen.id))
   const isIndeterminate = !isAllSelected && selection.size > 0
 
   return (
@@ -73,9 +61,9 @@ export default function PlaylistView({
           <div class="text-sm text-neutral-400">
             <span class="block sm:inline">
               <span>
-                {playlist.replacements.length}{" "}
-                {playlist.replacements.length === 1 ? "track" : "tracks"} found
-                out of {playlist.tracks.length}
+                {stolenTracks.length}{" "}
+                {stolenTracks.length === 1 ? "track" : "tracks"} found out of{" "}
+                {playlist.tracks.length}
               </span>
               &nbsp;
               <span class="mx-1 hidden sm:inline">•</span>
@@ -98,14 +86,14 @@ export default function PlaylistView({
         </div>
       </div>
       {isExtended && (
-        <div class="p-4 pt-6">
-          {playlist.replacements.map((r, i) => {
+        <div class="p-4 pr-5 pt-6">
+          {stolenTracks.map((s, i) => {
             return (
-              <ReplacementView
-                replacement={r}
-                taylorsTrack={taylorsTracks && taylorsTracks[i]}
-                selected={selection.has(r.stolen.id)}
-                onSelect={selected => onSelectTrack(r.stolen.id, selected)}
+              <StolenTrackView
+                stolen={s}
+                selected={selection.has(s.stolen.id)}
+                onSelect={selected => onSelectTrack(s.stolen.id, selected)}
+                onOpenReplacementEditor={() => onOpenReplacementEditor(i)}
               />
             )
           })}

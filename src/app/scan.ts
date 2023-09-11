@@ -11,27 +11,28 @@ import {
   Progress,
   ScanError,
   ScannedPlaylist,
-  TrackReplacements,
+  StolenReplacements,
+  StolenTrack,
 } from "../types"
 import _TAYLORS_VERSIONS_JSON from "./taylorsversions.json"
 
-const TAYLORS_VERSIONS: {
-  [key: string]: { replacements: string[] }
+export const TAYLORS_VERSIONS: {
+  [key: string]: StolenReplacements
 } = _TAYLORS_VERSIONS_JSON
 
 const getTrackReplacements = (
   tracks: PlaylistedTrack[],
-): TrackReplacements[] => {
-  let replacements: TrackReplacements[] = []
+): StolenTrack[] => {
+  let replacements: StolenTrack[] = []
   tracks.forEach((t, i) => {
     if (t.track && t.track.type === "track") {
       const track = t.track as Track
-      const taylorsVersion = TAYLORS_VERSIONS[track.external_ids.isrc]
-      if (taylorsVersion) {
+      const stolenReplacements = TAYLORS_VERSIONS[track.external_ids.isrc]
+      if (stolenReplacements) {
         replacements.push({
           position: i + 1,
-          stolen: track,
-          taylorsVersionIds: taylorsVersion.replacements,
+          track: track,
+          replacements: stolenReplacements,
         })
       }
     }
@@ -66,7 +67,7 @@ export async function scanUserPlaylists(
         )
         const replacements = getTrackReplacements(playlistWithTracks.tracks)
         if (replacements.length > 0) {
-          return { ...playlistWithTracks, replacements }
+          return { ...playlistWithTracks, stolenTracks: replacements }
         }
       }
       return null

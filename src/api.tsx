@@ -75,14 +75,6 @@ export const getPlaylistWithTracks = async (
   return { ...playlist, tracks }
 }
 
-export const getTracks = async (spotify: SpotifyApi, ids: string[]) => {
-  const tracks: Track[] = []
-  for (let offset = 0; offset < ids.length; offset += 50) {
-    tracks.push(...(await spotify.tracks.get(ids.slice(offset, offset + 50))))
-  }
-  return tracks
-}
-
 export const removeItemsFromPlaylist = async (
   spotify: SpotifyApi,
   playlist: { id: string; snapshot_id?: string },
@@ -101,4 +93,41 @@ export const removeItemsFromPlaylist = async (
     )
   }
   return await Promise.all(promises)
+}
+
+const getTracks = async (spotify: SpotifyApi, ids: string[]) => {
+  const tracks: Track[] = []
+  for (let offset = 0; offset < ids.length; offset += 50) {
+    tracks.push(...(await spotify.tracks.get(ids.slice(offset, offset + 50))))
+  }
+  return tracks
+}
+
+export class TrackCache {
+  private cache: Map<string, Track> = new Map()
+
+  constructor(private spotify: SpotifyApi) {}
+
+  async get(id: string): Promise<Track> {
+    if (this.cache.has(id)) {
+      return this.cache.get(id)
+    }
+    const track = await this.spotify.tracks.get(id)
+    this.cache.set(id, track)
+    return track
+  }
+
+  async getMany(ids: string[]): Promise<Track[]> {
+    const missingIds = ids.filter(id => !this.cache.has(id))
+    if (missingIds.length === 0) {
+      return ids.map(id => this.cache.get(id))
+    }
+    const tracks = await getTracks(this.spotify, missingIds)
+    tracks.forEach(track => this.cache.set(track.id, track))
+    return ids.map(id => this.cache.get(id))
+  }
+
+  tryGet(id: string): Track | null {
+    return this.cache.get(id) ?? null
+  }
 }

@@ -1,17 +1,19 @@
 import * as Sentry from "@sentry/react"
 import { SpotifyApi } from "@spotify/web-api-ts-sdk"
 import { removeItemsFromPlaylist } from "../api"
-import { Progress, ReplaceError, SelectedPlaylist } from "../types"
+import { PlaylistSelection, Progress, ReplaceError } from "../types"
 
 export async function replaceTracks(
   spotify: SpotifyApi,
-  playlists: SelectedPlaylist[],
+  playlists: PlaylistSelection[],
   onProgress: (progress: Progress) => void,
 ): Promise<ReplaceError[]> {
   const total = playlists.reduce((sum, p) => sum + p.newTracks.length, 0)
   let counter = 0
 
-  const replacePlaylist = async (playlist: SelectedPlaylist): Promise<void> => {
+  const replacePlaylist = async (
+    playlist: PlaylistSelection,
+  ): Promise<void> => {
     let trackCounter = 0
     try {
       for (const r of playlist.newTracks.reverse()) {

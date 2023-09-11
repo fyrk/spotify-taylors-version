@@ -4,10 +4,10 @@ import { useEffect, useState } from "preact/hooks"
 import { BaseButton, Button, Fallback, Scaffold } from "../components"
 import {
   NO_PROGRESS,
+  PlaylistSelection as PlaylistWithSelection,
   Progress,
   ReplaceError,
   ScanResult,
-  SelectedPlaylist,
 } from "../types"
 import PlaylistEditor from "./playlisteditor/PlaylistEditor"
 import { replaceTracks } from "./replace"
@@ -121,27 +121,32 @@ const AppContent = ({
         <PlaylistEditor
           scanResult={scanResult}
           onDoReplace={async selectedTracks => {
-            setProgress(NO_PROGRESS)
-            setState("replacing")
-            const selectedPlaylists: SelectedPlaylist[] = scanResult.playlists
-              .map((p, i) => ({ p, s: selectedTracks[i] }))
-              .filter(({ s }) => s.size > 0)
-              .map(({ p, s }) => ({
-                id: p.id,
-                name: p.name,
-                snapshot_id: p.snapshot_id,
-                stolenIdsToRemove: Array.from(s),
-                newTracks: p.replacements
-                  .filter(r => s.has(r.stolen.id))
-                  .map(r => ({
-                    position: r.position,
-                    taylorsVersionId: r.taylorsVersionIds[0],
-                  })),
-              }))
-            setReplaceErrors(
-              await replaceTracks(spotify, selectedPlaylists, setProgress),
-            )
-            setState("finished")
+            try {
+              setProgress(NO_PROGRESS)
+              setState("replacing")
+              const selectedPlaylists: PlaylistWithSelection[] =
+                scanResult.playlists
+                  .map((p, i) => ({ p, s: selectedTracks[i] }))
+                  .filter(({ s }) => s.size > 0)
+                  .map(({ p, s }) => ({
+                    id: p.id,
+                    name: p.name,
+                    snapshot_id: p.snapshot_id,
+                    stolenIdsToRemove: Array.from(s),
+                    newTracks: p.stolenTracks
+                      .filter(t => s.has(t.track.id))
+                      .map(t => ({
+                        position: t.position,
+                        taylorsVersionId: t.replacements.ids[0],
+                      })),
+                  }))
+              setReplaceErrors(
+                await replaceTracks(spotify, selectedPlaylists, setProgress),
+              )
+              setState("finished")
+            } catch (e) {
+              setAsyncError(e)
+            }
           }}
           spotify={spotify}
         />
