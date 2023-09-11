@@ -55,8 +55,56 @@ export const ExternalLink = ({
   />
 )
 
-export const Checkbox = (props: JSX.IntrinsicElements["input"]) => (
-  <input type="checkbox" {...props} class={"accent-accent " + props.class} />
+export const Checkbox = (props: JSX.IntrinsicElements["input"]) => {
+  if (props.children) {
+    return (
+      <label class={"grid grid-cols-[1rem_1fr] gap-2 " + (props.class || "")}>
+        <input
+          {...props}
+          type="checkbox"
+          class="mt-[.2rem] h-4 w-4 accent-accent"
+        />
+        <div>{props.children}</div>
+      </label>
+    )
+  } else {
+    return (
+      <input
+        {...props}
+        type="checkbox"
+        class={"accent-accent " + (props.class || "")}
+      />
+    )
+  }
+}
+
+export const RadioGroup = ({
+  name,
+  selected,
+  options,
+  onChange,
+  ...props
+}: {
+  class?: string
+  name: string
+  selected: string
+  options: { value: string; label: string | JSX.Element }[]
+  onChange: (value: string) => void
+}) => (
+  <div class={"flex flex-col gap-2 " + (props.class || "")}>
+    {options.map(({ value, label }) => (
+      <label class="grid grid-cols-[1rem_1fr] gap-2" key={value}>
+        <input
+          type="radio"
+          name={name}
+          checked={value === selected}
+          onChange={e => onChange(value)}
+          class="mt-[.125rem] h-4 w-4 accent-accent"
+        />
+        <div>{label}</div>
+      </label>
+    ))}
+  </div>
 )
 
 export const BaseButton = (props: JSX.IntrinsicElements["button"]) => (

@@ -1,11 +1,10 @@
 import { ArrowRightIcon, PencilSquareIcon } from "@heroicons/react/20/solid"
-import { Track } from "@spotify/web-api-ts-sdk"
-import { Checkbox, ExternalLink } from "../../components"
-import { TrackPlaceholderIcon } from "../../icons"
+import { Checkbox } from "../../components"
 import { StolenTrackViewData } from "./PlaylistEditor"
+import TrackView from "./TrackView"
 
 export default function StolenTrackView({
-  stolen: { position, stolen: track, tv: replacement, hasMultipleReplacements },
+  stolen: { position, track, tv: replacement, hasMultipleReplacements },
   selected,
   onSelect,
   onOpenReplacementEditor,
@@ -41,6 +40,7 @@ export default function StolenTrackView({
           {/* 1.4rem = line height, to align with song title */}
           <button
             class="flex h-[1.4rem] items-center"
+            title="Select Variant"
             onClick={onOpenReplacementEditor}
           >
             <PencilSquareIcon class="h-5 w-5" />
@@ -57,33 +57,3 @@ export default function StolenTrackView({
     </div>
   )
 }
-
-const TrackView = ({ track }: { track: Track | null }) => (
-  <div class="grid h-12 min-w-0 grid-cols-[3rem_1fr] gap-3">
-    {track && track.album.images[0] ? (
-      <a href={track && track.external_urls.spotify} target="_blank">
-        <img src={track.album.images[0].url} />
-      </a>
-    ) : (
-      <TrackPlaceholderIcon />
-    )}
-    <div class="min-w-0">
-      <div class="overflow-hidden text-ellipsis whitespace-nowrap">
-        <ExternalLink
-          href={track && track.external_urls.spotify}
-          class="hover:underline"
-        >
-          {track && track.name}
-        </ExternalLink>
-      </div>
-      <div class="overflow-hidden text-ellipsis whitespace-nowrap text-neutral-400">
-        <ExternalLink
-          href={track && track.album.external_urls.spotify}
-          class="hover:underline"
-        >
-          {track && track.album.name}
-        </ExternalLink>
-      </div>
-    </div>
-  </div>
-)

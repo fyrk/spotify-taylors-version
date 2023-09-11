@@ -11,18 +11,16 @@ import {
   Progress,
   ScanError,
   ScannedPlaylist,
-  StolenReplacements,
   StolenTrack,
+  StolenVariants,
 } from "../types"
 import _TAYLORS_VERSIONS_JSON from "./taylorsversions.json"
 
 export const TAYLORS_VERSIONS: {
-  [key: string]: StolenReplacements
+  [key: string]: StolenVariants
 } = _TAYLORS_VERSIONS_JSON
 
-const getTrackReplacements = (
-  tracks: PlaylistedTrack[],
-): StolenTrack[] => {
+const getTrackReplacements = (tracks: PlaylistedTrack[]): StolenTrack[] => {
   let replacements: StolenTrack[] = []
   tracks.forEach((t, i) => {
     if (t.track && t.track.type === "track") {
@@ -32,7 +30,7 @@ const getTrackReplacements = (
         replacements.push({
           position: i + 1,
           track: track,
-          replacements: stolenReplacements,
+          variants: stolenReplacements,
         })
       }
     }

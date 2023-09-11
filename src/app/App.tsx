@@ -120,24 +120,29 @@ const AppContent = ({
       return (
         <PlaylistEditor
           scanResult={scanResult}
-          onDoReplace={async selectedTracks => {
+          onDoReplace={async (selectedTracks, selectedVariants) => {
             try {
               setProgress(NO_PROGRESS)
               setState("replacing")
               const selectedPlaylists: PlaylistWithSelection[] =
                 scanResult.playlists
-                  .map((p, i) => ({ p, s: selectedTracks[i] }))
-                  .filter(({ s }) => s.size > 0)
-                  .map(({ p, s }) => ({
+                  .map((p, i) => ({
+                    p,
+                    st: selectedTracks[i],
+                    sv: selectedVariants[i],
+                  }))
+                  .filter(({ st }) => st.size > 0)
+                  .map(({ p, st, sv }) => ({
                     id: p.id,
                     name: p.name,
                     snapshot_id: p.snapshot_id,
-                    stolenIdsToRemove: Array.from(s),
+                    stolenIdsToRemove: Array.from(st),
                     newTracks: p.stolenTracks
-                      .filter(t => s.has(t.track.id))
-                      .map(t => ({
+                      .map((t, i) => ({ t, v: sv[i] }))
+                      .filter(({ t }) => st.has(t.track.id))
+                      .map(({ t, v }) => ({
                         position: t.position,
-                        taylorsVersionId: t.replacements.ids[0],
+                        taylorsVersionId: v,
                       })),
                   }))
               setReplaceErrors(
@@ -158,6 +163,7 @@ const AppContent = ({
         <div class="w-full p-6">
           <div class="mx-auto w-full max-w-2xl text-center">
             <div class="mb-8 text-2xl">
+              {/* TODO it could also have been only one playlist */}
               Your playlists have been updated to (Taylor’s Version)!
             </div>
             <Button onClick={onLogout}>Back to Home</Button>

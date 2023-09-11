@@ -18,6 +18,10 @@ export default {
         accent: "#83b5dd",
         // Spotify brand color, see https://developer.spotify.com/documentation/design#using-our-colors
         "spotify-green": "#1db954",
+
+        neutral: {
+          750: "#303030",
+        },
       },
     },
   },

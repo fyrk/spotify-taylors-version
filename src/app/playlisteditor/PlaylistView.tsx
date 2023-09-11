@@ -33,7 +33,7 @@ export default function PlaylistView({
     if (isExtended) ref.current.scrollIntoView({ behavior: "smooth" })
   }, [isExtended])
 
-  const isAllSelected = stolenTracks.every(r => selection.has(r.stolen.id))
+  const isAllSelected = stolenTracks.every(r => selection.has(r.track.id))
   const isIndeterminate = !isAllSelected && selection.size > 0
 
   return (
@@ -91,8 +91,8 @@ export default function PlaylistView({
             return (
               <StolenTrackView
                 stolen={s}
-                selected={selection.has(s.stolen.id)}
-                onSelect={selected => onSelectTrack(s.stolen.id, selected)}
+                selected={selection.has(s.track.id)}
+                onSelect={selected => onSelectTrack(s.track.id, selected)}
                 onOpenReplacementEditor={() => onOpenReplacementEditor(i)}
               />
             )

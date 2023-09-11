@@ -1,14 +1,15 @@
 import { SpotifyApi, Track } from "@spotify/web-api-ts-sdk"
-import { useMemo, useState } from "preact/hooks"
+import { useEffect, useMemo, useState } from "preact/hooks"
 import { TrackCache } from "../../api"
 import { Button } from "../../components"
 import { ScanResult } from "../../types"
 import PlaylistView from "./PlaylistView"
+import VariantSelector from "./VariantSelector"
 import spotifyLogoGreen from "/img/spotify_logo_green.svg?url"
 
 export interface StolenTrackViewData {
   position: number
-  stolen: Track
+  track: Track
   tv: Track | null
   hasMultipleReplacements: boolean
 }
@@ -19,7 +20,10 @@ export default function PlaylistEditor({
   spotify,
 }: {
   scanResult: ScanResult
-  onDoReplace: (selectedTracks: Set<string>[]) => void
+  onDoReplace: (
+    selectedTracks: Set<string>[],
+    selectedVariants: string[][],
+  ) => void
   spotify: SpotifyApi
 }) {
   const { playlists, errors } = scanResult
@@ -43,13 +47,14 @@ export default function PlaylistEditor({
     )
   }, [playlists, selectedTracks])
 
-  const [replacementEdit, setReplacementEdit] = useState<{
+  const [variantEdit, setReplacementEdit] = useState<{
     playlistIdx: number
     stolenIdx: number
   } | null>(null)
 
-  const [selectedReplacements, setSelectedReplacements] = useState<string[][]>(
-    playlists.map(p => p.stolenTracks.map(s => s.replacements.ids[0])),
+  // for every playlist, for every stolen track, track id of selected variant
+  const [selectedVariants, setSelectedVariants] = useState<string[][]>(
+    playlists.map(p => p.stolenTracks.map(s => s.variants.ids[0])),
   )
 
   const trackCache = useState(new TrackCache(spotify))[0]
@@ -63,13 +68,21 @@ export default function PlaylistEditor({
       playlists.map((p, pi) =>
         p.stolenTracks.map((s, si) => ({
           position: s.position,
-          stolen: s.track,
-          tv: trackCache.tryGet(selectedReplacements[pi][si]),
-          hasMultipleReplacements: s.replacements.ids.length > 1,
+          track: s.track,
+          tv: trackCache.tryGet(selectedVariants[pi][si]),
+          hasMultipleReplacements: s.variants.ids.length > 1,
         })),
       ),
-    [playlists, trackCache, selectedReplacements, hasLoadedTvTracks],
+    [playlists, trackCache, selectedVariants, hasLoadedTvTracks],
   )
+
+  useEffect(() => {
+    if (variantEdit) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = "auto"
+    }
+  }, [variantEdit])
 
   return (
     <div class="w-full grow p-3 pt-12">
@@ -77,7 +90,7 @@ export default function PlaylistEditor({
         <div class="mb-12 text-center">
           <Button
             class="bg-accent disabled:bg-neutral-600"
-            onClick={() => onDoReplace(selectedTracks)}
+            onClick={() => onDoReplace(selectedTracks, selectedVariants)}
             disabled={songsToReplaceCount === 0}
           >
             {songsToReplaceCount === 0 ? (
@@ -90,10 +103,16 @@ export default function PlaylistEditor({
             )}
           </Button>
         </div>
-        <div class="mb-10 text-center text-lg sm:text-xl">
-          Choose which songs you would like to replace below.
-          <br />
-          Tap on a playlist to select individual tracks.
+        <div class="mx-auto mb-10 max-w-lg text-center text-lg sm:text-xl">
+          <p class="mb-3">
+            Select which songs you would like to replace below.
+            <br />
+            Tap on a playlist to select individual tracks.
+          </p>
+          <p>
+            If there are multiple Taylor’s Version releases, you can also
+            flexibly choose a variant.
+          </p>
         </div>
         <div>
           {playlists.map((p, pi) => (
@@ -108,7 +127,7 @@ export default function PlaylistEditor({
                 } else {
                   setExpanded(p.id)
                   trackCache
-                    .getMany(p.stolenTracks.map(s => s.replacements.ids).flat())
+                    .getMany(p.stolenTracks.map(s => s.variants.ids).flat())
                     .then(() => {
                       setHasLoadedTvTracks(hlt => {
                         const newHlt = [...hlt]
@@ -172,7 +191,67 @@ export default function PlaylistEditor({
         </div>
       </div>
 
-      {/* dialog for track replacement editor */}
+      {variantEdit && (
+        <VariantSelector
+          playlists={playlists}
+          variantEdit={variantEdit}
+          currentVariant={
+            selectedVariants[variantEdit.playlistIdx][variantEdit.stolenIdx]
+          }
+          taylorsTracks={trackCache.tryGetMany(
+            playlists[variantEdit.playlistIdx].stolenTracks[
+              variantEdit.stolenIdx
+            ].variants.ids,
+          )}
+          onSelect={(newVariant, mode) => {
+            setSelectedVariants(svs => {
+              let newSvs: string[][]
+              switch (mode) {
+                case "single":
+                  newSvs = [...svs]
+                  newSvs[variantEdit.playlistIdx] = [
+                    ...svs[variantEdit.playlistIdx],
+                  ]
+                  newSvs[variantEdit.playlistIdx][variantEdit.stolenIdx] =
+                    newVariant
+                  break
+
+                case "samestolen":
+                  const stolen =
+                    playlists[variantEdit.playlistIdx].stolenTracks[
+                      variantEdit.stolenIdx
+                    ]
+                  newSvs = svs.map((p, playlistIndex) => {
+                    const playlist = playlists[playlistIndex]
+                    return p.map((variant, stolenIdx) =>
+                      playlist.stolenTracks[stolenIdx].track.id ===
+                      stolen.track.id
+                        ? newVariant
+                        : variant,
+                    )
+                  })
+                  break
+
+                case "everywhere":
+                  newSvs = svs.map((p, playlistIndex) => {
+                    const playlist = playlists[playlistIndex]
+                    return p.map((variant, stolenIdx) =>
+                      playlist.stolenTracks[stolenIdx].variants.ids.includes(
+                        newVariant,
+                      )
+                        ? newVariant
+                        : variant,
+                    )
+                  })
+                  break
+              }
+              return newSvs
+            })
+            setReplacementEdit(null)
+          }}
+          onClose={() => setReplacementEdit(null)}
+        />
+      )}
     </div>
   )
 }

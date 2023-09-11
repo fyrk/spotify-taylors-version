@@ -11,10 +11,10 @@ import {
 /**
  * Information on a stolen track and possible replacements
  */
-export interface StolenReplacements {
+export interface StolenVariants {
   ids: string[]
-  isLive?: boolean
-  isRemix?: boolean
+  isLive?: boolean // whether stolen track is live
+  isRemix?: boolean // whether stolen track is remix
 }
 
 export interface ScanResult {
@@ -62,7 +62,7 @@ export interface ScannedPlaylist extends PlaylistWithTracks {
 export interface StolenTrack {
   position: number
   track: Track
-  replacements: StolenReplacements
+  variants: StolenVariants
 }
 
 /**

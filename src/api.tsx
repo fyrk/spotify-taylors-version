@@ -130,4 +130,8 @@ export class TrackCache {
   tryGet(id: string): Track | null {
     return this.cache.get(id) ?? null
   }
+
+  tryGetMany(ids: string[]): Track[] {
+    return ids.map(id => this.tryGet(id))
+  }
 }
