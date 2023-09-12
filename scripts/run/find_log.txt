@@ -1033,6 +1033,11 @@ New Year’s Day
 
 All Too Well
   -> All Too Well (Taylor's Version) • Red (Taylor's Version)
+  -> All Too Well (10 Minute Version) (Taylor's Version) (From The Vault) • Red (Taylor's Version)
+  -> All Too Well (10 Minute Version) (Taylor's Version) (From The Vault) • The More Red (Taylor’s Version) Chapter
+  -> All Too Well (10 Minute Version) (Taylor's Version) (From The Vault) • Red (Taylor’s Version): The Slow Motion Chapter
+  -> All Too Well (10 Minute Version) (The Short Film) • All Too Well (10 Minute Version) (The Short Film)
+  -> All Too Well (Sad Girl Autumn Version) - Recorded at Long Pond Studios • All Too Well (Sad Girl Autumn Version) - Recorded at Long Pond Studios
 
 Wildest Dreams
   -> Wildest Dreams (Taylor's Version) • Wildest Dreams (Taylor's Version)
@@ -1163,8 +1168,8 @@ The Story Of Us
 
 Forever & Always
   -> Forever & Always (Taylor’s Version) • Fearless (Taylor's Version)
-  -> Forever & Always (Taylor’s Version) • Fearless (Taylor’s Version): The I Remember What You Said Last Night Chapter
   -> Forever & Always (Taylor’s Version) • Fearless (Taylor's Version): The Halfway Out The Door Chapter
+  -> Forever & Always (Taylor’s Version) • Fearless (Taylor’s Version): The I Remember What You Said Last Night Chapter
   -> Forever & Always (Piano Version) (Taylor’s Version) • Fearless (Taylor's Version)
 
 Hey Stephen
@@ -1360,6 +1365,11 @@ I Knew You Were Trouble.
 
 All Too Well
   -> All Too Well (Taylor's Version) • Red (Taylor's Version)
+  -> All Too Well (10 Minute Version) (Taylor's Version) (From The Vault) • Red (Taylor's Version)
+  -> All Too Well (10 Minute Version) (Taylor's Version) (From The Vault) • The More Red (Taylor’s Version) Chapter
+  -> All Too Well (10 Minute Version) (Taylor's Version) (From The Vault) • Red (Taylor’s Version): The Slow Motion Chapter
+  -> All Too Well (10 Minute Version) (The Short Film) • All Too Well (10 Minute Version) (The Short Film)
+  -> All Too Well (Sad Girl Autumn Version) - Recorded at Long Pond Studios • All Too Well (Sad Girl Autumn Version) - Recorded at Long Pond Studios
 
 22
   -> 22 (Taylor's Version) • Red (Taylor's Version)
@@ -1453,6 +1463,11 @@ I Knew You Were Trouble.
 
 All Too Well
   -> All Too Well (Taylor's Version) • Red (Taylor's Version)
+  -> All Too Well (10 Minute Version) (Taylor's Version) (From The Vault) • Red (Taylor's Version)
+  -> All Too Well (10 Minute Version) (Taylor's Version) (From The Vault) • The More Red (Taylor’s Version) Chapter
+  -> All Too Well (10 Minute Version) (Taylor's Version) (From The Vault) • Red (Taylor’s Version): The Slow Motion Chapter
+  -> All Too Well (10 Minute Version) (The Short Film) • All Too Well (10 Minute Version) (The Short Film)
+  -> All Too Well (Sad Girl Autumn Version) - Recorded at Long Pond Studios • All Too Well (Sad Girl Autumn Version) - Recorded at Long Pond Studios
 
 22
   -> 22 (Taylor's Version) • Red (Taylor's Version)
@@ -1734,8 +1749,8 @@ Untouchable
 Forever & Always - Piano Version
   -> Forever & Always (Piano Version) (Taylor’s Version) • Fearless (Taylor's Version)
   -> Forever & Always (Taylor’s Version) • Fearless (Taylor's Version)
-  -> Forever & Always (Taylor’s Version) • Fearless (Taylor’s Version): The I Remember What You Said Last Night Chapter
   -> Forever & Always (Taylor’s Version) • Fearless (Taylor's Version): The Halfway Out The Door Chapter
+  -> Forever & Always (Taylor’s Version) • Fearless (Taylor’s Version): The I Remember What You Said Last Night Chapter
 
 Come In With The Rain
   -> Come In With The Rain (Taylor’s Version) • Fearless (Taylor's Version)
@@ -1796,8 +1811,8 @@ The Way I Loved You
 
 Forever & Always
   -> Forever & Always (Taylor’s Version) • Fearless (Taylor's Version)
-  -> Forever & Always (Taylor’s Version) • Fearless (Taylor’s Version): The I Remember What You Said Last Night Chapter
   -> Forever & Always (Taylor’s Version) • Fearless (Taylor's Version): The Halfway Out The Door Chapter
+  -> Forever & Always (Taylor’s Version) • Fearless (Taylor’s Version): The I Remember What You Said Last Night Chapter
   -> Forever & Always (Piano Version) (Taylor’s Version) • Fearless (Taylor's Version)
 
 The Best Day
@@ -1859,8 +1874,8 @@ The Way I Loved You
 
 Forever & Always
   -> Forever & Always (Taylor’s Version) • Fearless (Taylor's Version)
-  -> Forever & Always (Taylor’s Version) • Fearless (Taylor’s Version): The I Remember What You Said Last Night Chapter
   -> Forever & Always (Taylor’s Version) • Fearless (Taylor's Version): The Halfway Out The Door Chapter
+  -> Forever & Always (Taylor’s Version) • Fearless (Taylor’s Version): The I Remember What You Said Last Night Chapter
   -> Forever & Always (Piano Version) (Taylor’s Version) • Fearless (Taylor's Version)
 
 The Best Day
