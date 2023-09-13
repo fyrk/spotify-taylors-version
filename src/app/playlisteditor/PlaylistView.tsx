@@ -3,8 +3,8 @@ import { useEffect, useRef } from "preact/hooks"
 import { Checkbox, ExternalLink } from "../../components"
 import { PlaylistPlaceholderIcon } from "../../icons"
 import { PlaylistWithTracks } from "../../types"
-import { StolenTrackViewData } from "./PlaylistEditor"
-import StolenTrackView from "./StolenTrackView"
+import { ReplaceViewData } from "./PlaylistEditor"
+import ReplacementView from "./ReplaceView"
 
 export default function PlaylistView({
   playlist,
@@ -18,7 +18,7 @@ export default function PlaylistView({
   spotify,
 }: {
   playlist: PlaylistWithTracks
-  stolenTracks: StolenTrackViewData[]
+  stolenTracks: ReplaceViewData[]
   selection: Set<string>
   isExpanded: boolean
   onToggle: () => void
@@ -77,7 +77,7 @@ export default function PlaylistView({
         </div>
         <div class="flex items-center justify-end">
           <Checkbox
-            class="h-6 w-6 cursor-pointer"
+            class="h-6 w-6"
             checked={isAllSelected}
             indeterminate={isIndeterminate}
             onChange={e => onSelectPlaylist(e.currentTarget.checked)}
@@ -89,7 +89,7 @@ export default function PlaylistView({
         <div class="p-4 pr-5 pt-6">
           {stolenTracks.map((s, i) => {
             return (
-              <StolenTrackView
+              <ReplacementView
                 stolen={s}
                 selected={selection.has(s.track.id)}
                 onSelect={selected => onSelectTrack(s.track.id, selected)}

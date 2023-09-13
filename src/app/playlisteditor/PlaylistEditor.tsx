@@ -1,18 +1,39 @@
 import { SpotifyApi, Track } from "@spotify/web-api-ts-sdk"
 import { useEffect, useMemo, useState } from "preact/hooks"
 import { TrackCache } from "../../api"
-import { Button } from "../../components"
-import { ScanResult } from "../../types"
+import { Button, Checkbox } from "../../components"
+import { ScanResult, StolenVariants } from "../../types"
 import PlaylistView from "./PlaylistView"
 import VariantSelector from "./VariantSelector"
 import spotifyLogoGreen from "/img/spotify_logo_green.svg?url"
 
-export interface StolenTrackViewData {
+export interface ReplaceViewData {
   position: number
   track: Track
   tv: Track | null
-  hasMultipleReplacements: boolean
+  hasMultipleVariants: boolean
 }
+
+const SELECTION_CATEGORIES = [
+  {
+    label: "Replace original live releases",
+    predicate: (s: StolenVariants) => s.isLive,
+  },
+  {
+    label: "Replace original remixes",
+    predicate: (s: StolenVariants) => s.isRemix,
+  },
+  {
+    label: (
+      <>
+        Replace original special releases that don’t have a Taylor’s Version
+        variant <small>(SN&nbsp;Acoustics, Pop Mixes, Demos)</small>
+      </>
+    ),
+    predicate: (s: StolenVariants) =>
+      s.isAcousticWithoutTV || s.isDemoWithoutTV || s.isMixWithoutTV,
+  },
+]
 
 export default function PlaylistEditor({
   scanResult,
@@ -30,6 +51,8 @@ export default function PlaylistEditor({
 
   const [expanded, setExpanded] = useState<string>(null)
 
+  // ========================
+  // TRACK SELECTION
   // for every playlist, set of all selected tracks
   // Spotify's API only supports removing all occurrences of the same track in a playlist
   const [selectedTracks, setSelectedTracks] = useState<Set<string>[]>(
@@ -47,7 +70,62 @@ export default function PlaylistEditor({
     )
   }, [playlists, selectedTracks])
 
-  const [variantEdit, setReplacementEdit] = useState<{
+  // special selection categories
+  const _createCategory = (p: (s: StolenVariants) => boolean) => {
+    const [exists, isAllSelected, isIndeterminate] = useMemo(() => {
+      let exists = false // whether tracks in this category exist
+      let isAllSelected = true // whether all tracks in this category are selected
+      let isSomeSelected = false // whether some tracks in this category are selected
+      playlists.forEach((playlist, i) => {
+        for (const stolen of playlist.stolenTracks) {
+          if (p(stolen.variants)) {
+            exists = true
+            if (!selectedTracks[i].has(stolen.track.id)) {
+              isAllSelected = false
+            }
+            if (selectedTracks[i].has(stolen.track.id)) {
+              isSomeSelected = true
+            }
+          }
+        }
+      })
+      return [exists, isAllSelected, !isAllSelected && isSomeSelected]
+    }, [playlists, selectedTracks])
+
+    const toggle = (selected: boolean) => {
+      if (selected) {
+        setSelectedTracks(old =>
+          old.map((s, i) => {
+            const newS = new Set(s)
+            playlists[i].stolenTracks.forEach(
+              s => p(s.variants) && newS.add(s.track.id),
+            )
+            return newS
+          }),
+        )
+      } else {
+        setSelectedTracks(old =>
+          old.map((s, i) => {
+            const newS = new Set(s)
+            playlists[i].stolenTracks.forEach(
+              s => p(s.variants) && newS.delete(s.track.id),
+            )
+            return newS
+          }),
+        )
+      }
+    }
+    return { exists, isAllSelected, isIndeterminate, toggle }
+  }
+
+  const selectionCategories = SELECTION_CATEGORIES.map(c => ({
+    ...c,
+    ..._createCategory(c.predicate),
+  })).filter(c => c.exists)
+
+  // ========================
+  // VARIANT EDITING
+  const [variantEdit, setVariantEdit] = useState<{
     playlistIdx: number
     stolenIdx: number
   } | null>(null)
@@ -57,25 +135,6 @@ export default function PlaylistEditor({
     playlists.map(p => p.stolenTracks.map(s => s.variants.ids[0])),
   )
 
-  const trackCache = useState(new TrackCache(spotify))[0]
-  // for every playlist, whether TV tracks are in cache
-  const [hasLoadedTvTracks, setHasLoadedTvTracks] = useState<boolean[]>(
-    Array(playlists.length).fill(false),
-  )
-
-  const stolenTrackViewData = useMemo(
-    () =>
-      playlists.map((p, pi) =>
-        p.stolenTracks.map((s, si) => ({
-          position: s.position,
-          track: s.track,
-          tv: trackCache.tryGet(selectedVariants[pi][si]),
-          hasMultipleReplacements: s.variants.ids.length > 1,
-        })),
-      ),
-    [playlists, trackCache, selectedVariants, hasLoadedTvTracks],
-  )
-
   useEffect(() => {
     if (variantEdit) {
       document.body.style.overflow = "hidden"
@@ -83,6 +142,27 @@ export default function PlaylistEditor({
       document.body.style.overflow = "auto"
     }
   }, [variantEdit])
+
+  // ========================
+  // CACHING
+  const trackCache = useState(new TrackCache(spotify))[0]
+  // for every playlist, whether TV tracks are in cache
+  const [hasLoadedTvTracks, setHasLoadedTvTracks] = useState<boolean[]>(
+    Array(playlists.length).fill(false),
+  )
+
+  const stolenTrackViewData: ReplaceViewData[][] = useMemo(
+    () =>
+      playlists.map((p, pi) =>
+        p.stolenTracks.map((s, si) => ({
+          position: s.position,
+          track: s.track,
+          tv: trackCache.tryGet(selectedVariants[pi][si]),
+          hasMultipleVariants: s.variants.ids.length > 1,
+        })),
+      ),
+    [playlists, trackCache, selectedVariants, hasLoadedTvTracks],
+  )
 
   return (
     <div class="w-full grow p-3 pt-12">
@@ -114,6 +194,22 @@ export default function PlaylistEditor({
             flexibly choose a variant.
           </p>
         </div>
+
+        {selectionCategories.length > 0 && (
+          <div class="mb-10 flex flex-col gap-2 px-6 text-lg">
+            {selectionCategories.map(c => (
+              <Checkbox
+                class="mt-[.125rem] h-6 w-6"
+                checked={c.isAllSelected}
+                indeterminate={c.isIndeterminate}
+                onChange={e => c.toggle(e.currentTarget.checked)}
+              >
+                {c.label}
+              </Checkbox>
+            ))}
+          </div>
+        )}
+
         <div>
           {playlists.map((p, pi) => (
             <PlaylistView
@@ -167,7 +263,7 @@ export default function PlaylistEditor({
                 )
               }}
               onOpenReplacementEditor={(stolenIdx: number) =>
-                setReplacementEdit({ playlistIdx: pi, stolenIdx })
+                setVariantEdit({ playlistIdx: pi, stolenIdx })
               }
               spotify={spotify}
             />
@@ -247,9 +343,9 @@ export default function PlaylistEditor({
               }
               return newSvs
             })
-            setReplacementEdit(null)
+            setVariantEdit(null)
           }}
-          onClose={() => setReplacementEdit(null)}
+          onClose={() => setVariantEdit(null)}
         />
       )}
     </div>

@@ -115,7 +115,7 @@ export default function VariantSelector({
             },
             {
               value: "everywhere",
-              label: <>Use variant as standard replacement</>,
+              label: <>Use variant as default replacement</>,
             },
           ]}
           onChange={mode => setMode(mode as VariantSelectMode)}

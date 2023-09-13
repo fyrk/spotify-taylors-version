@@ -1,15 +1,20 @@
 import { ArrowRightIcon, PencilSquareIcon } from "@heroicons/react/20/solid"
 import { Checkbox } from "../../components"
-import { StolenTrackViewData } from "./PlaylistEditor"
+import { ReplaceViewData } from "./PlaylistEditor"
 import TrackView from "./TrackView"
 
-export default function StolenTrackView({
-  stolen: { position, track, tv: replacement, hasMultipleReplacements },
+export default function ReplacementView({
+  stolen: {
+    position,
+    track,
+    tv: replacement,
+    hasMultipleVariants: hasMultipleReplacements,
+  },
   selected,
   onSelect,
-  onOpenReplacementEditor,
+  onOpenReplacementEditor: onOpenVariantEditor,
 }: {
-  stolen: StolenTrackViewData
+  stolen: ReplaceViewData
   selected: boolean
   onSelect: (selected: boolean) => void
   onOpenReplacementEditor: () => void
@@ -41,7 +46,7 @@ export default function StolenTrackView({
           <button
             class="flex h-[1.4rem] items-center"
             title="Select Variant"
-            onClick={onOpenReplacementEditor}
+            onClick={onOpenVariantEditor}
           >
             <PencilSquareIcon class="h-5 w-5" />
           </button>
@@ -49,7 +54,7 @@ export default function StolenTrackView({
       )}
       <div class="col-start-8 row-start-1 h-6 w-6 self-center">
         <Checkbox
-          class="h-6 w-6 cursor-pointer"
+          class="h-6 w-6"
           checked={selected}
           onChange={e => onSelect(e.currentTarget.checked)}
         />

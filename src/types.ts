@@ -13,8 +13,12 @@ import {
  */
 export interface StolenVariants {
   ids: string[]
-  isLive?: boolean // whether stolen track is live
-  isRemix?: boolean // whether stolen track is remix
+  // infos on the stolen track
+  isLive?: boolean
+  isRemix?: boolean
+  isAcousticWithoutTV?: boolean
+  isDemoWithoutTV?: boolean
+  isMixWithoutTV?: boolean
 }
 
 export interface ScanResult {

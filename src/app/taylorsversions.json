@@ -16,7 +16,7 @@
     ]
   },
   "USCJY0803448": {
-    "isMix": true,
+    "isMixWithoutTV": true,
     "ids": [
       "6YvqWjhGD8mB5QXcbcUKtx",
       "3CeCwYWvdfXbZLXFhBrbnf",
@@ -269,14 +269,14 @@
     ]
   },
   "USCJY1231047": {
-    "isDemo": true,
+    "isDemoWithoutTV": true,
     "ids": [
       "3S7HNKPakdwNEBFIVTL6dZ",
       "2x950lXpk0SmcmYcVyUQAn"
     ]
   },
   "USCJY1231048": {
-    "isDemo": true,
+    "isDemoWithoutTV": true,
     "ids": [
       "4OAuvHryIVv4kMDNSLuPt6",
       "2XdxAd2zyRG6GteILB6F8y"
@@ -424,7 +424,7 @@
     ]
   },
   "GBUM71026563": {
-    "isMix": true,
+    "isMixWithoutTV": true,
     "ids": [
       "7G0gBu6nLdhFDPRLc0HdDG"
     ]
