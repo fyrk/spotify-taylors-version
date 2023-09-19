@@ -71,6 +71,8 @@ for await (const { item } of getPaginatedItems(
 for (const id of [
   // Love Story (Taylor’s Version)
   "4j2syEjl3h1To8KbRgvmJn",
+  // Love Story (Taylor’s Version) [Elvira Remix]
+  "3x4gaf5IPyFQNrxZY07CXA",
   // Fearless (Taylor's Version): The Halfway Out The Door Chapter
   "4Vs9aG0KwsHUCVhQ5kGgxv",
   // Fearless (Taylor's Version): The Kissing In The Rain Chapter
