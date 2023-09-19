@@ -55,14 +55,17 @@ export const ExternalLink = ({
   />
 )
 
-export const Checkbox = (props: JSX.IntrinsicElements["input"]) => {
+export const Checkbox = ({
+  inputClass,
+  ...props
+}: JSX.IntrinsicElements["input"] & { inputClass?: string }) => {
   if (props.children) {
     return (
-      <label class="grid grid-cols-[1rem_1fr] gap-2">
+      <label class={"grid grid-cols-[1rem_1fr] gap-2 " + (props.class || "")}>
         <input
           {...props}
           type="checkbox"
-          class={"cursor-pointer accent-accent " + (props.class || "")}
+          class={"cursor-pointer accent-accent " + (inputClass || "")}
         />
         <div class="ml-2">{props.children}</div>
       </label>
@@ -72,7 +75,7 @@ export const Checkbox = (props: JSX.IntrinsicElements["input"]) => {
       <input
         {...props}
         type="checkbox"
-        class={"cursor-pointer accent-accent " + (props.class || "")}
+        class={"cursor-pointer accent-accent " + (inputClass || "")}
       />
     )
   }

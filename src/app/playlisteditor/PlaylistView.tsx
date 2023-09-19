@@ -77,7 +77,7 @@ export default function PlaylistView({
         </div>
         <div class="flex items-center justify-end">
           <Checkbox
-            class="h-6 w-6"
+            inputClass="h-6 w-6"
             checked={isAllSelected}
             indeterminate={isIndeterminate}
             onChange={e => onSelectPlaylist(e.currentTarget.checked)}

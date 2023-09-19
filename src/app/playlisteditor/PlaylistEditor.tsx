@@ -199,7 +199,7 @@ export default function PlaylistEditor({
           <div class="mb-10 flex flex-col gap-2 px-6 text-lg">
             {selectionCategories.map(c => (
               <Checkbox
-                class="mt-[.125rem] h-6 w-6"
+                inputClass="mt-[.125rem] h-6 w-6"
                 checked={c.isAllSelected}
                 indeterminate={c.isIndeterminate}
                 onChange={e => c.toggle(e.currentTarget.checked)}

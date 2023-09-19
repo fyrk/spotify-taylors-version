@@ -1,8 +1,12 @@
 import { XMarkIcon } from "@heroicons/react/24/outline"
 import { Track } from "@spotify/web-api-ts-sdk"
 import { useState } from "preact/hooks"
-import { Button, ExternalLink, RadioGroup } from "../../components"
-import { ScannedPlaylist } from "../../types"
+import { Button, Checkbox, ExternalLink, RadioGroup } from "../../components"
+import {
+  UnleashVariantSelectModes,
+  useUnleashVariantSelectModes,
+} from "../../helpers/unleash"
+import { ScannedPlaylist, StolenTrack } from "../../types"
 import TrackView from "./TrackView"
 
 export type VariantSelectMode =
@@ -25,15 +29,20 @@ export default function VariantSelector({
   }
   currentVariant: string
   taylorsTracks: Track[]
-  onSelect: (newVariant: string, mode: VariantSelectMode) => void
+  onSelect: (newVariant: string, mode: NonNullable<VariantSelectMode>) => void
   onClose: () => void
 }) {
+  const unleashSelectModes: UnleashVariantSelectModes =
+    useUnleashVariantSelectModes()
+
   const playlist = playlists[playlistIdx]
   const stolen = playlists[playlistIdx].stolenTracks[stolenIdx]
 
   const [selectedVariant, setSelectedVariant] = useState<string>(currentVariant)
 
-  const [mode, setMode] = useState<VariantSelectMode>("samestolen")
+  const [mode, setMode] = useState<VariantSelectMode>(
+    unleashSelectModes.defaultMode,
+  )
 
   return (
     <div
@@ -93,6 +102,39 @@ export default function VariantSelector({
           })}
         </div>
 
+        <ModeToggle
+          unleashSelectModes={unleashSelectModes}
+          stolen={stolen}
+          mode={mode}
+          onChange={setMode}
+        />
+
+        <Button
+          class="text-x mb-2 w-full py-2"
+          onClick={() => onSelect(selectedVariant, mode)}
+        >
+          Set variant
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+const ModeToggle = ({
+  unleashSelectModes,
+  stolen,
+  mode,
+  onChange,
+}: {
+  unleashSelectModes: UnleashVariantSelectModes
+  stolen: StolenTrack
+  mode: VariantSelectMode
+  onChange: (mode: VariantSelectMode) => void
+}) => {
+  switch (unleashSelectModes.name) {
+    case "single-samestolen-everywhere":
+    default:
+      return (
         <RadioGroup
           class="mb-8 pl-3"
           name="replacement-mode"
@@ -118,16 +160,37 @@ export default function VariantSelector({
               label: <>Use variant as default replacement</>,
             },
           ]}
-          onChange={mode => setMode(mode as VariantSelectMode)}
+          onChange={mode => onChange(mode as VariantSelectMode)}
         />
-
-        <Button
-          class="text-x mb-2 w-full py-2"
-          onClick={() => onSelect(selectedVariant, mode)}
+      )
+    case "single-everywhere":
+      return (
+        <Checkbox
+          class="mb-8 pl-3"
+          inputClass="mt-[.125em] h-5 w-5"
+          checked={mode === "everywhere"}
+          onChange={e =>
+            onChange(e.currentTarget.checked ? "everywhere" : "single")
+          }
         >
-          Set variant
-        </Button>
-      </div>
-    </div>
-  )
+          Use variant everywhere
+        </Checkbox>
+      )
+    case "single-samestolen":
+      return (
+        <Checkbox
+          class="mb-8 pl-3"
+          inputClass="mt-[.125em] h-5 w-5"
+          checked={mode === "samestolen"}
+          onChange={e =>
+            onChange(e.currentTarget.checked ? "samestolen" : "single")
+          }
+        >
+          Use variant for every occurrence of{" "}
+          <span class="italic">
+            {stolen.track.name}&nbsp;• {stolen.track.album.name}
+          </span>
+        </Checkbox>
+      )
+  }
 }

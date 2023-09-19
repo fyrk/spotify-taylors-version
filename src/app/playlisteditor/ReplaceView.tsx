@@ -54,7 +54,7 @@ export default function ReplacementView({
       )}
       <div class="col-start-8 row-start-1 h-6 w-6 self-center">
         <Checkbox
-          class="h-6 w-6"
+          inputClass="h-6 w-6"
           checked={selected}
           onChange={e => onSelect(e.currentTarget.checked)}
         />

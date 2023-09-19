@@ -13,8 +13,10 @@
 		"@heroicons/react": "^2.0.18",
 		"@sentry/react": "^7.68.0",
 		"@spotify/web-api-ts-sdk": "^1.1.1",
+		"@unleash/proxy-client-react": "^3.6.0",
 		"plausible-tracker": "^0.3.8",
-		"preact": "^10.17.1"
+		"preact": "^10.17.1",
+		"unleash-proxy-client": "^2.5.0"
 	},
 	"devDependencies": {
 		"@darkobits/vite-plugin-favicons": "^0.3.0",
