@@ -1,0 +1,3 @@
+[submodule "src/helpers/plausible-tracker-sendbeacon"]
+	path = src/helpers/plausible-tracker-sendbeacon
+	url = https://github.com/orgrosua/plausible-tracker.git

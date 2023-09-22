@@ -5,7 +5,7 @@ import Home from "./Home"
 import { createSpotifyApi } from "./api"
 import App from "./app/App"
 import { Fallback } from "./components"
-import { trackPlausibleEvent } from "./helpers/plausible"
+import { PlausibleEvent, trackPlausibleEvent } from "./helpers/plausible"
 
 export default function Main() {
   const [spotify, setSpotify] = useState<SpotifyApi>(null)
@@ -26,7 +26,7 @@ export default function Main() {
         const { authenticated } = await sdk.authenticate()
         if (authenticated && !spotify) {
           setSpotify(sdk)
-          trackPlausibleEvent("Authenticated")
+          trackPlausibleEvent(PlausibleEvent.Authenticated)
         }
       } catch (e) {
         console.info("User is not authenticated", e)
@@ -53,7 +53,7 @@ export default function Main() {
           Sentry.captureMessage("Authentication error", { extra: { error } })
       }
 
-      trackPlausibleEvent("Authentication error", { props: { error } })
+      trackPlausibleEvent(PlausibleEvent.AuthError, { props: { error } })
     }
   }, [])
 
@@ -65,7 +65,7 @@ export default function Main() {
             spotify.logOut()
             setSpotify(null)
             if (state !== "finished") {
-              trackPlausibleEvent("Logout", { props: { state } })
+              trackPlausibleEvent(PlausibleEvent.Logout, { props: { state } })
             }
           }}
           spotify={spotify}
@@ -79,7 +79,7 @@ export default function Main() {
       <Home
         authError={authError}
         onLogin={async () => {
-          trackPlausibleEvent("Login click")
+          trackPlausibleEvent(PlausibleEvent.LoginClick)
           try {
             setAuthError(null)
             const sdk = createSpotifyApi()
@@ -93,7 +93,7 @@ export default function Main() {
             // @ts-ignore
             const error = new Error("Authenticating failed", { cause: e })
             Sentry.captureException(error)
-            trackPlausibleEvent("Authentication failed")
+            trackPlausibleEvent(PlausibleEvent.AuthFailed)
           }
         }}
       />
