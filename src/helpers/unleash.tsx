@@ -46,9 +46,13 @@ const UNLEASH_VARIANT_SELECT_MODES: {
 } as const
 
 export function useUnleashVariantSelectModes(): UnleashVariantSelectModes {
-  const variantName = useVariant("taylorsversion.variant-select-modes").name
-  return (
-    UNLEASH_VARIANT_SELECT_MODES[variantName] ||
-    UNLEASH_VARIANT_SELECT_MODES["single-samestolen-everywhere"]
-  )
+  try {
+    const variantName = useVariant("taylorsversion.variant-select-modes").name
+    return (
+      UNLEASH_VARIANT_SELECT_MODES[variantName] ||
+      UNLEASH_VARIANT_SELECT_MODES["single-samestolen-everywhere"]
+    )
+  } catch (e) {
+    return UNLEASH_VARIANT_SELECT_MODES["single-samestolen-everywhere"]
+  }
 }
