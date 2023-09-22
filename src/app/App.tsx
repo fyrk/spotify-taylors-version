@@ -14,17 +14,17 @@ import { replaceTracks } from "./replace"
 import { scanUserPlaylists } from "./scan"
 import noScooterCircle from "/img/no_scooter_circle.svg?url"
 
+type AppState = "scanning" | "selecting" | "replacing" | "finished"
+
 export default function App({
   onLogout,
   spotify,
 }: {
-  onLogout: (state: string) => void
+  onLogout: (state: AppState) => void
   spotify: SpotifyApi
 }) {
   const [user, setUser] = useState<User>(null)
-  const [state, setState] = useState<
-    "scanning" | "selecting" | "replacing" | "finished"
-  >("scanning")
+  const [state, setState] = useState<AppState>("scanning")
 
   return (
     <Scaffold>

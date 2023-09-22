@@ -34,6 +34,29 @@ export default function Main() {
     })()
   }, [])
 
+  useEffect(() => {
+    // check for auth error in URL params
+    const url = new URL(window.location.href)
+    const error = url.searchParams.get("error")
+    if (error) {
+      url.searchParams.delete("error")
+      const newUrl = url.search ? url.href : url.href.replace("?", "")
+      window.history.replaceState({}, document.title, newUrl)
+
+      switch (error) {
+        // docs seem incomplete on error values, only access_denied is mentioned
+        case "access_denied":
+          break
+        default:
+          setAuthError(error)
+          // maybe eventually capture more possible error values with this
+          Sentry.captureMessage("Authentication error", { extra: { error } })
+      }
+
+      trackPlausibleEvent("Authentication error", { props: { error } })
+    }
+  }, [])
+
   if (spotify) {
     return (
       <Sentry.ErrorBoundary fallback={<Fallback />}>
@@ -41,7 +64,9 @@ export default function Main() {
           onLogout={state => {
             spotify.logOut()
             setSpotify(null)
-            trackPlausibleEvent("Logout", { props: { state } })
+            if (state !== "finished") {
+              trackPlausibleEvent("Logout", { props: { state } })
+            }
           }}
           spotify={spotify}
         />
@@ -54,7 +79,7 @@ export default function Main() {
       <Home
         authError={authError}
         onLogin={async () => {
-          trackPlausibleEvent("Attempt Login")
+          trackPlausibleEvent("Login click")
           try {
             setAuthError(null)
             const sdk = createSpotifyApi()
