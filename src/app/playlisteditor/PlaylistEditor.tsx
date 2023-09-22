@@ -16,18 +16,22 @@ export interface ReplaceViewData {
 
 const SELECTION_CATEGORIES = [
   {
+    name: "replace-og-live",
     label: "Replace original live releases",
     predicate: (s: StolenVariants) => s.isLive,
   },
   {
+    name: "replace-og-remixes",
     label: "Replace original remixes",
     predicate: (s: StolenVariants) => s.isRemix,
   },
   {
+    name: "replace-og-special",
     label: (
       <>
-        Replace original special releases that don’t have a Taylor’s Version
-        variant <small>(SN&nbsp;Acoustics, Pop Mixes, Demos)</small>
+        Replace original special releases that don’t have a
+        Taylor’s&nbsp;Version variant{" "}
+        <small>(SN&nbsp;Acoustics, Pop&nbsp;Mixes, Demos)</small>
       </>
     ),
     predicate: (s: StolenVariants) =>
@@ -44,6 +48,12 @@ export default function PlaylistEditor({
   onDoReplace: (
     selectedTracks: Set<string>[],
     selectedVariants: string[][],
+    metrics: {
+      selectionCategories: {
+        [name: string]: "yes" | "no" | "some" | "nonexistent"
+      }
+      totalFoundTracks: number
+    },
   ) => void
   spotify: SpotifyApi
 }) {
@@ -118,10 +128,11 @@ export default function PlaylistEditor({
     return { exists, isAllSelected, isIndeterminate, toggle }
   }
 
-  const selectionCategories = SELECTION_CATEGORIES.map(c => ({
+  const _selectionCategories = SELECTION_CATEGORIES.map(c => ({
     ...c,
     ..._createCategory(c.predicate),
-  })).filter(c => c.exists)
+  }))
+  const selectionCategories = _selectionCategories.filter(c => c.exists)
 
   // ========================
   // VARIANT EDITING
@@ -170,7 +181,26 @@ export default function PlaylistEditor({
         <div class="mb-12 text-center">
           <Button
             class="bg-accent disabled:bg-neutral-600"
-            onClick={() => onDoReplace(selectedTracks, selectedVariants)}
+            onClick={() =>
+              onDoReplace(selectedTracks, selectedVariants, {
+                selectionCategories: Object.fromEntries(
+                  _selectionCategories.map(c => [
+                    c.name,
+                    c.exists
+                      ? c.isAllSelected
+                        ? "yes"
+                        : c.isIndeterminate
+                        ? "some"
+                        : "no"
+                      : "nonexistent",
+                  ]),
+                ),
+                totalFoundTracks: playlists.reduce(
+                  (p, c) => p + c.tracks.length,
+                  0,
+                ),
+              })
+            }
             disabled={songsToReplaceCount === 0}
           >
             {songsToReplaceCount === 0 ? (

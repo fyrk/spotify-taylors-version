@@ -2,6 +2,7 @@ import * as Sentry from "@sentry/react"
 import { SpotifyApi, User } from "@spotify/web-api-ts-sdk"
 import { useEffect, useState } from "preact/hooks"
 import { BaseButton, Button, Fallback, Scaffold } from "../components"
+import { trackPlausibleEventPlaylistsUpdated } from "../helpers/plausible"
 import {
   NO_PROGRESS,
   PlaylistSelection as PlaylistWithSelection,
@@ -76,7 +77,7 @@ export default function App({
 }
 
 /**
- * Move app's content here so error fallback still shows header and logout button.
+ * Move app's content here so error fallback still shows header and logout button
  */
 const AppContent = ({
   state,
@@ -120,7 +121,7 @@ const AppContent = ({
       return (
         <PlaylistEditor
           scanResult={scanResult}
-          onDoReplace={async (selectedTracks, selectedVariants) => {
+          onDoReplace={async (selectedTracks, selectedVariants, metrics) => {
             try {
               setProgress(NO_PROGRESS)
               setState("replacing")
@@ -149,6 +150,16 @@ const AppContent = ({
                 await replaceTracks(spotify, selectedPlaylists, setProgress),
               )
               setState("finished")
+
+              trackPlausibleEventPlaylistsUpdated(
+                selectedPlaylists.length,
+                selectedPlaylists.reduce(
+                  (p, c) => p + c.stolenIdsToRemove.length,
+                  0,
+                ),
+                metrics.totalFoundTracks,
+                metrics.selectionCategories,
+              )
             } catch (e) {
               setAsyncError(e)
             }
