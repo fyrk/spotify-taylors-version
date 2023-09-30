@@ -2,6 +2,7 @@ import * as Sentry from "@sentry/react"
 // use client from PR [0]
 // until plausible-tracker supports navigator.sendBeacon [1]
 // and doesn't break target="_blank" [2]
+// when removing, also remove submodules: true from checkout in deploy workflow
 // [0] https://github.com/plausible/plausible-tracker/pull/54
 // [1] https://github.com/plausible/plausible-tracker/issues/12
 // [2] https://github.com/plausible/plausible-tracker/issues/12
