@@ -1,0 +1,467 @@
+[
+  {
+    "__typename": "PreRelease",
+    "uri": "spotify:prerelease:4bpd4VRmRpckdVU0su8LsM",
+    "preReleaseContent": {
+      "artists": {
+        "items": [
+          {
+            "data": {
+              "__typename": "Artist",
+              "id": "06HL4z0CvFAxyc27GXpf02",
+              "uri": "spotify:artist:06HL4z0CvFAxyc27GXpf02",
+              "profile": { "name": "Taylor Swift" },
+              "visuals": {
+                "avatarImage": {
+                  "sources": [
+                    {
+                      "url": "https://i.scdn.co/image/ab6761610000e5eb6a224073987b930f99adc706",
+                      "height": 640,
+                      "width": 640
+                    },
+                    {
+                      "url": "https://i.scdn.co/image/ab6761610000f1786a224073987b930f99adc706",
+                      "height": 160,
+                      "width": 160
+                    },
+                    {
+                      "url": "https://i.scdn.co/image/ab676161000051746a224073987b930f99adc706",
+                      "height": 320,
+                      "width": 320
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      "coverArt": {
+        "extractedColors": {
+          "colorRaw": { "hex": "#6898B8", "isFallback": false }
+        },
+        "sources": [
+          {
+            "url": "https://i.scdn.co/image/ab67616d00001e025cc1de8fa9b7c2f27af04958"
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d000048515cc1de8fa9b7c2f27af04958"
+          },
+          {
+            "url": "https://i.scdn.co/image/ab67616d0000b2735cc1de8fa9b7c2f27af04958"
+          }
+        ]
+      },
+      "type": "ALBUM",
+      "tracks": {
+        "items": [
+          {
+            "uri": "spotify:track:1hR8BSuEqPCCZfv93zzzz9",
+            "name": "Welcome To New York (Taylor's Version)",
+            "artists": {
+              "items": [
+                {
+                  "data": {
+                    "__typename": "Artist",
+                    "id": "06HL4z0CvFAxyc27GXpf02",
+                    "uri": "spotify:artist:06HL4z0CvFAxyc27GXpf02",
+                    "profile": { "name": "Taylor Swift" }
+                  }
+                }
+              ]
+            },
+            "duration": { "totalMilliseconds": 212600 },
+            "playability": { "playable": false },
+            "contentRating": { "label": "NONE" }
+          },
+          {
+            "uri": "spotify:track:45wMBGri1PORPjM9PwFfrS",
+            "name": "Blank Space (Taylor's Version)",
+            "artists": {
+              "items": [
+                {
+                  "data": {
+                    "__typename": "Artist",
+                    "id": "06HL4z0CvFAxyc27GXpf02",
+                    "uri": "spotify:artist:06HL4z0CvFAxyc27GXpf02",
+                    "profile": { "name": "Taylor Swift" }
+                  }
+                }
+              ]
+            },
+            "duration": { "totalMilliseconds": 231833 },
+            "playability": { "playable": false },
+            "contentRating": { "label": "NONE" }
+          },
+          {
+            "uri": "spotify:track:1hjRhYpWyqDpPahmSlUTlc",
+            "name": "Style (Taylor's Version)",
+            "artists": {
+              "items": [
+                {
+                  "data": {
+                    "__typename": "Artist",
+                    "id": "06HL4z0CvFAxyc27GXpf02",
+                    "uri": "spotify:artist:06HL4z0CvFAxyc27GXpf02",
+                    "profile": { "name": "Taylor Swift" }
+                  }
+                }
+              ]
+            },
+            "duration": { "totalMilliseconds": 231000 },
+            "playability": { "playable": false },
+            "contentRating": { "label": "NONE" }
+          },
+          {
+            "uri": "spotify:track:045ZeOHPIzhxxsm8bq5kyE",
+            "name": "Out Of The Woods (Taylor's Version)",
+            "artists": {
+              "items": [
+                {
+                  "data": {
+                    "__typename": "Artist",
+                    "id": "06HL4z0CvFAxyc27GXpf02",
+                    "uri": "spotify:artist:06HL4z0CvFAxyc27GXpf02",
+                    "profile": { "name": "Taylor Swift" }
+                  }
+                }
+              ]
+            },
+            "duration": { "totalMilliseconds": 235800 },
+            "playability": { "playable": false },
+            "contentRating": { "label": "NONE" }
+          },
+          {
+            "uri": "spotify:track:6GXgd1BPD9bUpqw5AntGV5",
+            "name": "All You Had To Do Was Stay (Taylor's Version)",
+            "artists": {
+              "items": [
+                {
+                  "data": {
+                    "__typename": "Artist",
+                    "id": "06HL4z0CvFAxyc27GXpf02",
+                    "uri": "spotify:artist:06HL4z0CvFAxyc27GXpf02",
+                    "profile": { "name": "Taylor Swift" }
+                  }
+                }
+              ]
+            },
+            "duration": { "totalMilliseconds": 193289 },
+            "playability": { "playable": false },
+            "contentRating": { "label": "NONE" }
+          },
+          {
+            "uri": "spotify:track:3pv7Q5v2dpdefwdWIvE7yH",
+            "name": "Shake It Off (Taylor's Version)",
+            "artists": {
+              "items": [
+                {
+                  "data": {
+                    "__typename": "Artist",
+                    "id": "06HL4z0CvFAxyc27GXpf02",
+                    "uri": "spotify:artist:06HL4z0CvFAxyc27GXpf02",
+                    "profile": { "name": "Taylor Swift" }
+                  }
+                }
+              ]
+            },
+            "duration": { "totalMilliseconds": 219209 },
+            "playability": { "playable": false },
+            "contentRating": { "label": "NONE" }
+          },
+          {
+            "uri": "spotify:track:43y1WpBdnEy5TR9aZoSQL9",
+            "name": "I Wish You Would (Taylor's Version)",
+            "artists": {
+              "items": [
+                {
+                  "data": {
+                    "__typename": "Artist",
+                    "id": "06HL4z0CvFAxyc27GXpf02",
+                    "uri": "spotify:artist:06HL4z0CvFAxyc27GXpf02",
+                    "profile": { "name": "Taylor Swift" }
+                  }
+                }
+              ]
+            },
+            "duration": { "totalMilliseconds": 207650 },
+            "playability": { "playable": false },
+            "contentRating": { "label": "NONE" }
+          },
+          {
+            "uri": "spotify:track:64FzgoLZ3oXu2SriZblHic",
+            "name": "Bad Blood (Taylor's Version)",
+            "artists": {
+              "items": [
+                {
+                  "data": {
+                    "__typename": "Artist",
+                    "id": "06HL4z0CvFAxyc27GXpf02",
+                    "uri": "spotify:artist:06HL4z0CvFAxyc27GXpf02",
+                    "profile": { "name": "Taylor Swift" }
+                  }
+                }
+              ]
+            },
+            "duration": { "totalMilliseconds": 211103 },
+            "playability": { "playable": false },
+            "contentRating": { "label": "NONE" }
+          },
+          {
+            "uri": "spotify:track:1K39ty6o1sHwwlZwO6a7wK",
+            "name": "Wildest Dreams (Taylor's Version)",
+            "artists": {
+              "items": [
+                {
+                  "data": {
+                    "__typename": "Artist",
+                    "id": "06HL4z0CvFAxyc27GXpf02",
+                    "uri": "spotify:artist:06HL4z0CvFAxyc27GXpf02",
+                    "profile": { "name": "Taylor Swift" }
+                  }
+                }
+              ]
+            },
+            "duration": { "totalMilliseconds": 220433 },
+            "playability": { "playable": false },
+            "contentRating": { "label": "NONE" }
+          },
+          {
+            "uri": "spotify:track:75W3SngKzTuoQ94uLf3y82",
+            "name": "How You Get The Girl (Taylor's Version)",
+            "artists": {
+              "items": [
+                {
+                  "data": {
+                    "__typename": "Artist",
+                    "id": "06HL4z0CvFAxyc27GXpf02",
+                    "uri": "spotify:artist:06HL4z0CvFAxyc27GXpf02",
+                    "profile": { "name": "Taylor Swift" }
+                  }
+                }
+              ]
+            },
+            "duration": { "totalMilliseconds": 247533 },
+            "playability": { "playable": false },
+            "contentRating": { "label": "NONE" }
+          },
+          {
+            "uri": "spotify:track:5QVVjX0ZItqlVpEuVCM9Yg",
+            "name": "This Love (Taylor’s Version)",
+            "artists": {
+              "items": [
+                {
+                  "data": {
+                    "__typename": "Artist",
+                    "id": "06HL4z0CvFAxyc27GXpf02",
+                    "uri": "spotify:artist:06HL4z0CvFAxyc27GXpf02",
+                    "profile": { "name": "Taylor Swift" }
+                  }
+                }
+              ]
+            },
+            "duration": { "totalMilliseconds": 250100 },
+            "playability": { "playable": false },
+            "contentRating": { "label": "NONE" }
+          },
+          {
+            "uri": "spotify:track:2f0GI2ZLUtbGqFx8t2Gk6A",
+            "name": "I Know Places (Taylor's Version)",
+            "artists": {
+              "items": [
+                {
+                  "data": {
+                    "__typename": "Artist",
+                    "id": "06HL4z0CvFAxyc27GXpf02",
+                    "uri": "spotify:artist:06HL4z0CvFAxyc27GXpf02",
+                    "profile": { "name": "Taylor Swift" }
+                  }
+                }
+              ]
+            },
+            "duration": { "totalMilliseconds": 195700 },
+            "playability": { "playable": false },
+            "contentRating": { "label": "NONE" }
+          },
+          {
+            "uri": "spotify:track:2ByBBvpR9b7IynvRmnG7kG",
+            "name": "Clean (Taylor's Version)",
+            "artists": {
+              "items": [
+                {
+                  "data": {
+                    "__typename": "Artist",
+                    "id": "06HL4z0CvFAxyc27GXpf02",
+                    "uri": "spotify:artist:06HL4z0CvFAxyc27GXpf02",
+                    "profile": { "name": "Taylor Swift" }
+                  }
+                }
+              ]
+            },
+            "duration": { "totalMilliseconds": 271000 },
+            "playability": { "playable": false },
+            "contentRating": { "label": "NONE" }
+          },
+          {
+            "uri": "spotify:track:2ve0kuaWUCt4Zx8x4bf1MR",
+            "name": "Wonderland (Taylor's Version)",
+            "artists": {
+              "items": [
+                {
+                  "data": {
+                    "__typename": "Artist",
+                    "id": "06HL4z0CvFAxyc27GXpf02",
+                    "uri": "spotify:artist:06HL4z0CvFAxyc27GXpf02",
+                    "profile": { "name": "Taylor Swift" }
+                  }
+                }
+              ]
+            },
+            "duration": { "totalMilliseconds": 245566 },
+            "playability": { "playable": false },
+            "contentRating": { "label": "NONE" }
+          },
+          {
+            "uri": "spotify:track:4UwqOWDpdeIDVQDuKT6iza",
+            "name": "You Are In Love (Taylor's Version)",
+            "artists": {
+              "items": [
+                {
+                  "data": {
+                    "__typename": "Artist",
+                    "id": "06HL4z0CvFAxyc27GXpf02",
+                    "uri": "spotify:artist:06HL4z0CvFAxyc27GXpf02",
+                    "profile": { "name": "Taylor Swift" }
+                  }
+                }
+              ]
+            },
+            "duration": { "totalMilliseconds": 267389 },
+            "playability": { "playable": false },
+            "contentRating": { "label": "NONE" }
+          },
+          {
+            "uri": "spotify:track:2vPMoMDXxu9uX1igWZmXSG",
+            "name": "New Romantics (Taylor's Version)",
+            "artists": {
+              "items": [
+                {
+                  "data": {
+                    "__typename": "Artist",
+                    "id": "06HL4z0CvFAxyc27GXpf02",
+                    "uri": "spotify:artist:06HL4z0CvFAxyc27GXpf02",
+                    "profile": { "name": "Taylor Swift" }
+                  }
+                }
+              ]
+            },
+            "duration": { "totalMilliseconds": 230177 },
+            "playability": { "playable": false },
+            "contentRating": { "label": "NONE" }
+          },
+          {
+            "uri": "spotify:track:71BqAINEnezjQfxE4VuJfq",
+            "name": "\"Slut!\" (Taylor's Version) (From The Vault)",
+            "artists": {
+              "items": [
+                {
+                  "data": {
+                    "__typename": "Artist",
+                    "id": "06HL4z0CvFAxyc27GXpf02",
+                    "uri": "spotify:artist:06HL4z0CvFAxyc27GXpf02",
+                    "profile": { "name": "Taylor Swift" }
+                  }
+                }
+              ]
+            },
+            "duration": { "totalMilliseconds": 180381 },
+            "playability": { "playable": false },
+            "contentRating": { "label": "NONE" }
+          },
+          {
+            "uri": "spotify:track:4NioO5R9sHEZh4cGzMHyNt",
+            "name": "Say Don't Go (Taylor's Version) (From The Vault)",
+            "artists": {
+              "items": [
+                {
+                  "data": {
+                    "__typename": "Artist",
+                    "id": "06HL4z0CvFAxyc27GXpf02",
+                    "uri": "spotify:artist:06HL4z0CvFAxyc27GXpf02",
+                    "profile": { "name": "Taylor Swift" }
+                  }
+                }
+              ]
+            },
+            "duration": { "totalMilliseconds": 279833 },
+            "playability": { "playable": false },
+            "contentRating": { "label": "NONE" }
+          },
+          {
+            "uri": "spotify:track:5KD6AEm19QnMbfWpfoOHMl",
+            "name": "Now That We Don't Talk (Taylor's Version) (From The Vault)",
+            "artists": {
+              "items": [
+                {
+                  "data": {
+                    "__typename": "Artist",
+                    "id": "06HL4z0CvFAxyc27GXpf02",
+                    "uri": "spotify:artist:06HL4z0CvFAxyc27GXpf02",
+                    "profile": { "name": "Taylor Swift" }
+                  }
+                }
+              ]
+            },
+            "duration": { "totalMilliseconds": 146436 },
+            "playability": { "playable": false },
+            "contentRating": { "label": "NONE" }
+          },
+          {
+            "uri": "spotify:track:6T0sEnqjmHISIKwFETeeiP",
+            "name": "Suburban Legends (Taylor's Version) (From The Vault)",
+            "artists": {
+              "items": [
+                {
+                  "data": {
+                    "__typename": "Artist",
+                    "id": "06HL4z0CvFAxyc27GXpf02",
+                    "uri": "spotify:artist:06HL4z0CvFAxyc27GXpf02",
+                    "profile": { "name": "Taylor Swift" }
+                  }
+                }
+              ]
+            },
+            "duration": { "totalMilliseconds": 171818 },
+            "playability": { "playable": false },
+            "contentRating": { "label": "NONE" }
+          },
+          {
+            "uri": "spotify:track:1Iq8oo9XkmmvCQiGOfORiz",
+            "name": "Is It Over Now? (Taylor's Version) (From The Vault)",
+            "artists": {
+              "items": [
+                {
+                  "data": {
+                    "__typename": "Artist",
+                    "id": "06HL4z0CvFAxyc27GXpf02",
+                    "uri": "spotify:artist:06HL4z0CvFAxyc27GXpf02",
+                    "profile": { "name": "Taylor Swift" }
+                  }
+                }
+              ]
+            },
+            "duration": { "totalMilliseconds": 229477 },
+            "playability": { "playable": false },
+            "contentRating": { "label": "NONE" }
+          }
+        ],
+        "totalCount": 21
+      },
+      "name": "1989 (Taylor's Version)",
+      "uri": "spotify:album:64LU4c1nfjz1t4VnGhagcg",
+      "copyright": "© 2023 Taylor Swift\n℗ 2023 Taylor Swift"
+    },
+    "releaseDate": { "isoString": "2023-10-27T04:00:00Z" },
+    "timezone": "Europe/Berlin"
+  }
+]

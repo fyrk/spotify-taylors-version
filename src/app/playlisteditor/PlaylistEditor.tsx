@@ -2,7 +2,7 @@ import { SpotifyApi, Track } from "@spotify/web-api-ts-sdk"
 import { useEffect, useMemo, useState } from "preact/hooks"
 import { TrackCache } from "../../api"
 import { Button, Checkbox } from "../../components"
-import { ScanResult, StolenVariants } from "../../types"
+import { PreReleaseTrack, ScanResult, StolenVariants } from "../../types"
 import PlaylistView from "./PlaylistView"
 import VariantSelector from "./VariantSelector"
 import spotifyLogoGreen from "/img/spotify_logo_green.svg?url"
@@ -10,7 +10,9 @@ import spotifyLogoGreen from "/img/spotify_logo_green.svg?url"
 export interface ReplaceViewData {
   position: number
   track: Track
+  isPreReleaseOnly: boolean
   tv: Track | null
+  preReleaseTv: PreReleaseTrack | null
   hasMultipleVariants: boolean
 }
 
@@ -27,7 +29,7 @@ const SELECTION_CATEGORIES = [
     label: (
       <>
         Replace original special releases that don’t have a Taylor’s Version
-        variant <small>(SN&nbsp;Acoustics, Pop Mixes, Demos)</small>
+        variant <small>(SN&nbsp;Acoustics, Pop&nbsp;Mixes, Demos)</small>
       </>
     ),
     predicate: (s: StolenVariants) =>
@@ -56,7 +58,14 @@ export default function PlaylistEditor({
   // for every playlist, set of all selected tracks
   // Spotify's API only supports removing all occurrences of the same track in a playlist
   const [selectedTracks, setSelectedTracks] = useState<Set<string>[]>(
-    playlists.map(p => new Set(p.stolenTracks.map(r => r.track.id))),
+    playlists.map(
+      p =>
+        new Set(
+          p.stolenTracks
+            .filter(s => s.variants.ids.length > 0)
+            .map(s => s.track.id),
+        ),
+    ),
   )
 
   const songsToReplaceCount = useMemo(() => {
@@ -78,7 +87,8 @@ export default function PlaylistEditor({
       let isSomeSelected = false // whether some tracks in this category are selected
       playlists.forEach((playlist, i) => {
         for (const stolen of playlist.stolenTracks) {
-          if (p(stolen.variants)) {
+          // variants is empty if track only has pre-release replacements
+          if (p(stolen.variants) && stolen.variants.ids.length > 0) {
             exists = true
             if (!selectedTracks[i].has(stolen.track.id)) {
               isAllSelected = false
@@ -98,7 +108,10 @@ export default function PlaylistEditor({
           old.map((s, i) => {
             const newS = new Set(s)
             playlists[i].stolenTracks.forEach(
-              s => p(s.variants) && newS.add(s.track.id),
+              s =>
+                p(s.variants) &&
+                s.variants.ids.length > 0 &&
+                newS.add(s.track.id),
             )
             return newS
           }),
@@ -108,7 +121,10 @@ export default function PlaylistEditor({
           old.map((s, i) => {
             const newS = new Set(s)
             playlists[i].stolenTracks.forEach(
-              s => p(s.variants) && newS.delete(s.track.id),
+              s =>
+                p(s.variants) &&
+                s.variants.ids.length > 0 &&
+                newS.delete(s.track.id),
             )
             return newS
           }),
@@ -131,6 +147,7 @@ export default function PlaylistEditor({
   } | null>(null)
 
   // for every playlist, for every stolen track, track id of selected variant
+  // might be undefined if track only has pre-release replacements
   const [selectedVariants, setSelectedVariants] = useState<string[][]>(
     playlists.map(p => p.stolenTracks.map(s => s.variants.ids[0])),
   )
@@ -154,12 +171,27 @@ export default function PlaylistEditor({
   const stolenTrackViewData: ReplaceViewData[][] = useMemo(
     () =>
       playlists.map((p, pi) =>
-        p.stolenTracks.map((s, si) => ({
-          position: s.position,
-          track: s.track,
-          tv: trackCache.tryGet(selectedVariants[pi][si]),
-          hasMultipleVariants: s.variants.ids.length > 1,
-        })),
+        p.stolenTracks.map((s, si) => {
+          if (s.variants.ids.length > 0) {
+            return {
+              position: s.position,
+              track: s.track,
+              isPreReleaseOnly: false,
+              tv: trackCache.tryGet(selectedVariants[pi][si]),
+              preReleaseTv: null,
+              hasMultipleVariants: s.variants.ids.length > 1,
+            }
+          } else {
+            return {
+              position: s.position,
+              track: s.track,
+              isPreReleaseOnly: true,
+              tv: null,
+              preReleaseTv: s.variants.preReleaseTracks[0],
+              hasMultipleVariants: false,
+            }
+          }
+        }),
       ),
     [playlists, trackCache, selectedVariants, hasLoadedTvTracks],
   )
@@ -239,7 +271,9 @@ export default function PlaylistEditor({
                     i === pi
                       ? selected
                         ? new Set(
-                            playlists[i].stolenTracks.map(r => r.track.id),
+                            playlists[i].stolenTracks
+                              .filter(s => s.variants.ids.length > 0)
+                              .map(s => s.track.id),
                           )
                         : new Set()
                       : s,
@@ -247,6 +281,18 @@ export default function PlaylistEditor({
                 )
               }}
               onSelectTrack={(trackId: string, selected: boolean) => {
+                // assert track has released replacements
+                if (
+                  !playlists.some(p =>
+                    p.stolenTracks.some(
+                      s => s.track.id === trackId && s.variants.ids.length > 0,
+                    ),
+                  )
+                ) {
+                  throw new Error(
+                    `Track ${trackId} has no released replacements and should not be selected`,
+                  )
+                }
                 const setRemove = <T,>(s: Set<T>, v: T): Set<T> => {
                   const newSet = new Set(s)
                   newSet.delete(v)
@@ -262,10 +308,9 @@ export default function PlaylistEditor({
                   ),
                 )
               }}
-              onOpenReplacementEditor={(stolenIdx: number) =>
+              openVariantSelector={(stolenIdx: number) =>
                 setVariantEdit({ playlistIdx: pi, stolenIdx })
               }
-              spotify={spotify}
             />
           ))}
         </div>

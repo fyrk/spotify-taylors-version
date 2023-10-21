@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/react"
 import { SpotifyApi, Track } from "@spotify/web-api-ts-sdk"
 import {
   IRedirectionStrategy,
@@ -95,7 +96,7 @@ export const removeItemsFromPlaylist = async (
   return await Promise.all(promises)
 }
 
-const getTracks = async (spotify: SpotifyApi, ids: string[]) => {
+export const getTracks = async (spotify: SpotifyApi, ids: string[]) => {
   const tracks: Track[] = []
   for (let offset = 0; offset < ids.length; offset += 50) {
     tracks.push(...(await spotify.tracks.get(ids.slice(offset, offset + 50))))
@@ -108,13 +109,12 @@ export class TrackCache {
 
   constructor(private spotify: SpotifyApi) {}
 
-  async get(id: string): Promise<Track> {
-    if (this.cache.has(id)) {
-      return this.cache.get(id)
+  private addTracks(track: Track, id: string) {
+    if (track == null) {
+      const error = new Error(`Track info `)
+      return
     }
-    const track = await this.spotify.tracks.get(id)
-    this.cache.set(id, track)
-    return track
+    this.cache.set(track.id, track)
   }
 
   async getMany(ids: string[]): Promise<Track[]> {
@@ -122,8 +122,24 @@ export class TrackCache {
     if (missingIds.length === 0) {
       return ids.map(id => this.cache.get(id))
     }
+
     const tracks = await getTracks(this.spotify, missingIds)
-    tracks.forEach(track => this.cache.set(track.id, track))
+
+    const errorIds = []
+    for (let i = 0; i < tracks.length; i++) {
+      const track = tracks[i]
+      if (track == null) {
+        errorIds.push(missingIds[i])
+      } else {
+        this.addTracks(track, track.id)
+      }
+    }
+    if (errorIds.length > 0) {
+      const error = new Error(`Track info not found`)
+      console.error(error, errorIds)
+      Sentry.captureException(error, { extra: { ids: errorIds } })
+    }
+
     return ids.map(id => this.cache.get(id))
   }
 

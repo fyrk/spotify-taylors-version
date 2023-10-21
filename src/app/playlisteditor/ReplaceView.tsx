@@ -1,23 +1,26 @@
 import { ArrowRightIcon, PencilSquareIcon } from "@heroicons/react/20/solid"
+import { ClockIcon } from "@heroicons/react/24/outline"
 import { Checkbox } from "../../components"
 import { ReplaceViewData } from "./PlaylistEditor"
-import TrackView from "./TrackView"
+import { PreReleaseTrackView, TrackView } from "./TrackView"
 
-export default function ReplacementView({
+export default function ReplaceView({
   stolen: {
     position,
     track,
-    tv: replacement,
-    hasMultipleVariants: hasMultipleReplacements,
+    isPreReleaseOnly,
+    tv,
+    preReleaseTv,
+    hasMultipleVariants,
   },
   selected,
   onSelect,
-  onOpenReplacementEditor: onOpenVariantEditor,
+  openVariantSelector,
 }: {
   stolen: ReplaceViewData
   selected: boolean
   onSelect: (selected: boolean) => void
-  onOpenReplacementEditor: () => void
+  openVariantSelector: () => void
 }) {
   return (
     // grid  <sm: position (1), stolen (2-3), arrow (4), tv (5-6), edit (7), checkbox (8)
@@ -35,29 +38,37 @@ export default function ReplacementView({
       <div
         class={
           "col-span-5 px-3 sm:pl-0 " +
-          (hasMultipleReplacements ? "sm:col-span-2" : "sm:col-span-3")
+          (hasMultipleVariants ? "sm:col-span-2" : "sm:col-span-3")
         }
       >
-        <TrackView track={replacement} />
+        {tv ? (
+          <TrackView track={tv} />
+        ) : (
+          <PreReleaseTrackView track={preReleaseTv} />
+        )}
       </div>
-      {hasMultipleReplacements && (
+      {hasMultipleVariants && (
         <div class="col-start-8 row-start-2 self-start sm:col-start-7 sm:row-start-1 sm:self-center sm:pb-[.125rem]">
           {/* 1.4rem = line height, to align with song title */}
           <button
             class="flex h-[1.4rem] items-center"
             title="Select Variant"
-            onClick={onOpenVariantEditor}
+            onClick={openVariantSelector}
           >
             <PencilSquareIcon class="h-5 w-5" />
           </button>
         </div>
       )}
       <div class="col-start-8 row-start-1 h-6 w-6 self-center">
-        <Checkbox
-          inputClass="h-6 w-6"
-          checked={selected}
-          onChange={e => onSelect(e.currentTarget.checked)}
-        />
+        {isPreReleaseOnly ? (
+          <ClockIcon class="h-6 w-6" />
+        ) : (
+          <Checkbox
+            inputClass="h-6 w-6"
+            checked={selected}
+            onChange={e => onSelect(e.currentTarget.checked)}
+          />
+        )}
       </div>
     </div>
   )

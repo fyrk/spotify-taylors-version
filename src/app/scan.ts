@@ -6,8 +6,9 @@ import {
   Track,
   User,
 } from "@spotify/web-api-ts-sdk"
-import { getAllUserPlaylists, getPlaylistWithTracks } from "../api"
+import { getAllUserPlaylists, getPlaylistWithTracks, getTracks } from "../api"
 import {
+  PreReleaseTrack,
   Progress,
   ScanError,
   ScannedPlaylist,
@@ -15,10 +16,24 @@ import {
   StolenVariants,
 } from "../types"
 import _TAYLORS_VERSIONS_JSON from "./taylorsversions.json"
+import _PRERELEASE_JSON from "./taylorsversions_prerelease.json"
 
-export const TAYLORS_VERSIONS: {
+const TAYLORS_VERSIONS: {
   [key: string]: StolenVariants
 } = _TAYLORS_VERSIONS_JSON
+
+// tracks from pre-release pages that might be available by now
+const PRERELEASE_TRACKS: {
+  [id: string]: PreReleaseTrack
+} = Object.fromEntries(
+  Object.entries(_PRERELEASE_JSON["tracks"]).map(([id, t]) => [
+    id,
+    {
+      name: t.name,
+      album: _PRERELEASE_JSON["albums"][t.albumId],
+    },
+  ]),
+)
 
 const getTrackReplacements = (tracks: PlaylistedTrack[]): StolenTrack[] => {
   let replacements: StolenTrack[] = []
@@ -51,12 +66,33 @@ export async function scanUserPlaylists(
     return user
   })()
 
+  const checkPreReleaseTracksPromise = (async () => {
+    // check availability of pre-release tracks
+    // move unavailable tracks to StolenVariants.preReleaseTracks
+    const ids = Object.keys(PRERELEASE_TRACKS)
+    const tracks = await getTracks(spotify, ids)
+    const unavailableIds = ids.filter((id, i) => tracks[i] == null)
+    if (unavailableIds.length > 0) {
+      for (const stolenVariants of Object.values(TAYLORS_VERSIONS)) {
+        stolenVariants.preReleaseTracks = []
+        for (let i = stolenVariants.ids.length - 1; i >= 0; i--) {
+          const id = stolenVariants.ids[i]
+          if (unavailableIds.includes(id)) {
+            stolenVariants.ids.splice(i, 1)
+            stolenVariants.preReleaseTracks.splice(0, 0, PRERELEASE_TRACKS[id])
+          }
+        }
+      }
+    }
+  })()
+
   const scanPlaylist = async (
     playlist: SimplifiedPlaylist,
     total: number,
   ): Promise<ScannedPlaylist> => {
     try {
       const user = await userPromise
+      await checkPreReleaseTracksPromise
       if (playlist.owner.uri === user.uri) {
         const playlistWithTracks = await getPlaylistWithTracks(
           spotify,

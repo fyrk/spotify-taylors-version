@@ -1,10 +1,9 @@
-import { SpotifyApi } from "@spotify/web-api-ts-sdk"
 import { useEffect, useRef } from "preact/hooks"
 import { Checkbox, ExternalLink } from "../../components"
 import { PlaylistPlaceholderIcon } from "../../icons"
 import { PlaylistWithTracks } from "../../types"
 import { ReplaceViewData } from "./PlaylistEditor"
-import ReplacementView from "./ReplaceView"
+import ReplaceView from "./ReplaceView"
 
 export default function PlaylistView({
   playlist,
@@ -14,8 +13,7 @@ export default function PlaylistView({
   onToggle,
   onSelectPlaylist,
   onSelectTrack,
-  onOpenReplacementEditor,
-  spotify,
+  openVariantSelector,
 }: {
   playlist: PlaylistWithTracks
   stolenTracks: ReplaceViewData[]
@@ -24,8 +22,7 @@ export default function PlaylistView({
   onToggle: () => void
   onSelectPlaylist: (selected: boolean) => void
   onSelectTrack: (trackId: string, selected: boolean) => void
-  onOpenReplacementEditor: (stolenIdx: number) => void
-  spotify: SpotifyApi
+  openVariantSelector: (stolenIdx: number) => void
 }) {
   const ref = useRef<HTMLDivElement>()
 
@@ -33,7 +30,10 @@ export default function PlaylistView({
     if (isExtended) ref.current.scrollIntoView({ behavior: "smooth" })
   }, [isExtended])
 
-  const isAllSelected = stolenTracks.every(r => selection.has(r.track.id))
+  const isSelectable = stolenTracks.some(s => !s.isPreReleaseOnly) // tv is null if there are only unreleased replacements
+  const isAllSelected = stolenTracks.every(
+    s => s.isPreReleaseOnly || selection.has(s.track.id),
+  )
   const isIndeterminate = !isAllSelected && selection.size > 0
 
   return (
@@ -76,24 +76,26 @@ export default function PlaylistView({
           </div>
         </div>
         <div class="flex items-center justify-end">
-          <Checkbox
-            inputClass="h-6 w-6"
-            checked={isAllSelected}
-            indeterminate={isIndeterminate}
-            onChange={e => onSelectPlaylist(e.currentTarget.checked)}
-            onClick={e => e.stopPropagation()}
-          />
+          {isSelectable && (
+            <Checkbox
+              inputClass="h-6 w-6"
+              checked={isAllSelected}
+              indeterminate={isIndeterminate}
+              onChange={e => onSelectPlaylist(e.currentTarget.checked)}
+              onClick={e => e.stopPropagation()}
+            />
+          )}
         </div>
       </div>
       {isExtended && (
         <div class="p-4 pr-5 pt-6">
           {stolenTracks.map((s, i) => {
             return (
-              <ReplacementView
+              <ReplaceView
                 stolen={s}
                 selected={selection.has(s.track.id)}
                 onSelect={selected => onSelectTrack(s.track.id, selected)}
-                onOpenReplacementEditor={() => onOpenReplacementEditor(i)}
+                openVariantSelector={() => openVariantSelector(i)}
               />
             )
           })}

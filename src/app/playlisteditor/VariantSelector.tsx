@@ -7,7 +7,7 @@ import {
   useUnleashVariantSelectModes,
 } from "../../helpers/unleash"
 import { ScannedPlaylist, StolenTrack } from "../../types"
-import TrackView from "./TrackView"
+import { TrackView } from "./TrackView"
 
 export type VariantSelectMode =
   | "single" // select only replacement for current track

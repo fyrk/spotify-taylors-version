@@ -73,6 +73,8 @@ for (const id of [
   "4j2syEjl3h1To8KbRgvmJn",
   // Love Story (Taylor’s Version) [Elvira Remix]
   "3x4gaf5IPyFQNrxZY07CXA",
+  // You All Over Me (feat. Maren Morris) (Taylor’s Version) (From The Vault)
+  "5xd9LleY1wqsgKVTwLoXYI",
   // Fearless (Taylor's Version): The Halfway Out The Door Chapter
   "4Vs9aG0KwsHUCVhQ5kGgxv",
   // Fearless (Taylor's Version): The Kissing In The Rain Chapter
@@ -117,7 +119,7 @@ for (const album of simplifiedAlbums) {
   albums.push({ ...album, tracks })
 }
 
-fs.writeFile("run/albums.json", JSON.stringify(albums), err => {
+fs.writeFile("run/albums.json", JSON.stringify(albums, null, 2), err => {
   if (err) {
     console.error(err)
     return

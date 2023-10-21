@@ -8,12 +8,23 @@ import {
   UserReference,
 } from "@spotify/web-api-ts-sdk"
 
+export interface PreReleaseTrack {
+  name: string
+  album: {
+    name: string
+    image: string
+    releaseTime: Date
+    presaveLink: string
+  }
+}
+
 /**
  * Information on a stolen track and possible replacements
  */
 export interface StolenVariants {
   ids: string[]
-  // infos on the stolen track
+  preReleaseTracks?: PreReleaseTrack[]
+  // info on stolen track
   isLive?: boolean
   isRemix?: boolean
   isAcousticWithoutTV?: boolean
