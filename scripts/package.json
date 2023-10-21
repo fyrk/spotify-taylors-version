@@ -1,5 +1,6 @@
 {
   "name": "scripts",
+  "private": true,
   "main": "fetchTaylorAlbums.ts",
   "type": "module",
   "scripts": {
