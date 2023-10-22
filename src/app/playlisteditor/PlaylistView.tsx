@@ -48,7 +48,7 @@ export default function PlaylistView({
         {playlist.images[0] ? (
           <img
             src={playlist.images[0].url}
-            class="h-24 w-24 object-scale-down"
+            class="h-24 w-24 object-cover object-center"
           />
         ) : (
           <PlaylistPlaceholderIcon class="h-24 w-24" />
