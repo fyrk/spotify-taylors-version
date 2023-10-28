@@ -26,7 +26,7 @@ export interface StolenVariants {
   preReleaseTracks?: PreReleaseTrack[]
   // info on stolen track
   isLive?: boolean
-  isRemix?: boolean
+  isRemixWithoutTV?: boolean
   isAcousticWithoutTV?: boolean
   isDemoWithoutTV?: boolean
   isMixWithoutTV?: boolean

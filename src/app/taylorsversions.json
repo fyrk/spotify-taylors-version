@@ -1,13 +1,13 @@
 {
   "USCJY0903497": {
-    "isRemix": true,
+    "isRemixWithoutTV": true,
     "ids": [
       "6iiAfo4wTA2CVC3Uwx9uh8",
       "5OTddcb28Mkays7lF8hnmf"
     ]
   },
   "GBUM70900575": {
-    "isRemix": true,
+    "isRemixWithoutTV": true,
     "ids": [
       "6YvqWjhGD8mB5QXcbcUKtx",
       "3CeCwYWvdfXbZLXFhBrbnf",
@@ -39,6 +39,7 @@
   "USCJY1431379": {
     "ids": [
       "1K39ty6o1sHwwlZwO6a7wK",
+      "27exgla7YBw9DUNNcTIpjy",
       "1Ov37jtRQ2YNAe8HzfczkL",
       "1IxeJLsubGTboNN9K5XNfL"
     ]
@@ -80,7 +81,8 @@
   },
   "USCJY1431389": {
     "ids": [
-      "75W3SngKzTuoQ94uLf3y82"
+      "75W3SngKzTuoQ94uLf3y82",
+      "733OhaXQIHY7BKtY3vnSkn"
     ]
   },
   "USCJY0803333": {
@@ -123,7 +125,8 @@
   },
   "USCJY1431299": {
     "ids": [
-      "1hR8BSuEqPCCZfv93zzzz9"
+      "1hR8BSuEqPCCZfv93zzzz9",
+      "4WUepByoeqcedHoYhSNHRt"
     ]
   },
   "USCJY0803332": {
@@ -151,7 +154,8 @@
   },
   "USCJY1431329": {
     "ids": [
-      "045ZeOHPIzhxxsm8bq5kyE"
+      "045ZeOHPIzhxxsm8bq5kyE",
+      "1OcSfkeCg9hRC2sFKB4IMJ"
     ]
   },
   "USCJY1231046": {
@@ -163,6 +167,7 @@
   "USCJY1431399": {
     "ids": [
       "5QVVjX0ZItqlVpEuVCM9Yg",
+      "4WBEj8TeGtRPNJdOmT3WJW",
       "4d1CG5ei1E2vGbvmgf5KKv"
     ]
   },
@@ -215,7 +220,8 @@
   },
   "USCJY1431429": {
     "ids": [
-      "2ve0kuaWUCt4Zx8x4bf1MR"
+      "2ve0kuaWUCt4Zx8x4bf1MR",
+      "6HRsJu8vcnzYDN4t0570FY"
     ]
   },
   "USCJY0803264": {
@@ -233,70 +239,80 @@
   },
   "USCJY1431409": {
     "ids": [
-      "2f0GI2ZLUtbGqFx8t2Gk6A"
+      "2f0GI2ZLUtbGqFx8t2Gk6A",
+      "1ULabO0PEsdJekqVH6G10G"
     ]
   },
   "USCJY1531564": {
-    "isRemix": true,
     "ids": [
-      "64FzgoLZ3oXu2SriZblHic"
+      "6qAcApH8obo8eqatCKUHd9"
     ]
   },
   "USCJY1531577": {
-    "isRemix": true,
+    "isRemixWithoutTV": true,
     "ids": [
       "1K39ty6o1sHwwlZwO6a7wK",
+      "27exgla7YBw9DUNNcTIpjy",
       "1Ov37jtRQ2YNAe8HzfczkL",
       "1IxeJLsubGTboNN9K5XNfL"
     ]
   },
   "USCJY1431309": {
     "ids": [
-      "45wMBGri1PORPjM9PwFfrS"
+      "45wMBGri1PORPjM9PwFfrS",
+      "0108kcWLnn2HlH2kedi1gn"
     ]
   },
   "USCJY1431319": {
     "ids": [
-      "1hjRhYpWyqDpPahmSlUTlc"
+      "1hjRhYpWyqDpPahmSlUTlc",
+      "3Vpk1hfMAQme8VJ0SNRSkd"
     ]
   },
   "USCJY1431339": {
     "ids": [
-      "6GXgd1BPD9bUpqw5AntGV5"
+      "6GXgd1BPD9bUpqw5AntGV5",
+      "2k0ZEeAqzvYMcx9Qt5aClQ"
     ]
   },
   "USCJY1431349": {
     "ids": [
-      "3pv7Q5v2dpdefwdWIvE7yH"
+      "3pv7Q5v2dpdefwdWIvE7yH",
+      "50yNTF0Od55qnHLxYsA5Pw"
     ]
   },
   "USCJY1431359": {
     "ids": [
-      "43y1WpBdnEy5TR9aZoSQL9"
+      "43y1WpBdnEy5TR9aZoSQL9",
+      "3FxJDucHWdw6caWTKO5b23"
     ]
   },
   "USCJY1431369": {
     "ids": [
-      "64FzgoLZ3oXu2SriZblHic"
+      "64FzgoLZ3oXu2SriZblHic",
+      "7oZONwFiFIErZcXAtTu7FY"
     ]
   },
   "USCJY1431419": {
     "ids": [
-      "2ByBBvpR9b7IynvRmnG7kG"
+      "2ByBBvpR9b7IynvRmnG7kG",
+      "0lKUBmEyQfzsQHozyeXzES"
     ]
   },
   "USCJY1431439": {
     "ids": [
-      "4UwqOWDpdeIDVQDuKT6iza"
+      "4UwqOWDpdeIDVQDuKT6iza",
+      "0TyGh27YQ5LknmiDhCzJiT"
     ]
   },
   "USCJY1431449": {
     "ids": [
-      "2vPMoMDXxu9uX1igWZmXSG"
+      "2vPMoMDXxu9uX1igWZmXSG",
+      "5M787RexsAiVYjQusM98CV"
     ]
   },
   "USCJY1331285": {
-    "isRemix": true,
+    "isRemixWithoutTV": true,
     "ids": [
       "7qEUFOVcxRI19tbT68JcYK",
       "4whBXdLvNueDBttTAVTEjW"

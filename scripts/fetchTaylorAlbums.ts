@@ -81,6 +81,8 @@ for (const id of [
   "1iZR600UW2HCS3L7p5kNB8",
   // Fearless (Taylor’s Version): The I Remember What You Said Last Night Chapter
   "0XCoR1j5Sa2su9uDS9AScR",
+  // If This Was A Movie (Taylor’s Version)
+  "6IZm7NfvWyXp952VF36Z5F",
   // Red (Taylor’s Version): Could You Be The One Chapter
   "1ZkjQ4WBB99Rq5eFGqENNX",
   // Red (Taylor’s Version): She Wrote A Song About Me Chapter

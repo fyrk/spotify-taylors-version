@@ -1,3 +1,99 @@
+### 1989 (Taylor's Version) [Deluxe]
+
+Welcome To New York (Taylor's Version)
+
+Blank Space (Taylor's Version)
+
+Style (Taylor's Version)
+
+Out Of The Woods (Taylor's Version)
+
+All You Had To Do Was Stay (Taylor's Version)
+
+Shake It Off (Taylor's Version)
+
+I Wish You Would (Taylor's Version)
+
+Bad Blood (Taylor's Version)
+
+Wildest Dreams (Taylor's Version)
+
+How You Get The Girl (Taylor's Version)
+
+This Love (Taylor’s Version)
+
+I Know Places (Taylor's Version)
+
+Clean (Taylor's Version)
+
+Wonderland (Taylor's Version)
+
+You Are In Love (Taylor's Version)
+
+New Romantics (Taylor's Version)
+
+"Slut!" (Taylor's Version) (From The Vault)
+
+Say Don't Go (Taylor's Version) (From The Vault)
+
+Now That We Don't Talk (Taylor's Version) (From The Vault)
+
+Suburban Legends (Taylor's Version) (From The Vault)
+
+Is It Over Now? (Taylor's Version) (From The Vault)
+
+Bad Blood (feat. Kendrick Lamar) (Taylor's Version)
+
+
+
+
+### 1989 (Taylor's Version)
+
+Welcome To New York (Taylor's Version)
+
+Blank Space (Taylor's Version)
+
+Style (Taylor's Version)
+
+Out Of The Woods (Taylor's Version)
+
+All You Had To Do Was Stay (Taylor's Version)
+
+Shake It Off (Taylor's Version)
+
+I Wish You Would (Taylor's Version)
+
+Bad Blood (Taylor's Version)
+
+Wildest Dreams (Taylor's Version)
+
+How You Get The Girl (Taylor's Version)
+
+This Love (Taylor’s Version)
+
+I Know Places (Taylor's Version)
+
+Clean (Taylor's Version)
+
+Wonderland (Taylor's Version)
+
+You Are In Love (Taylor's Version)
+
+New Romantics (Taylor's Version)
+
+"Slut!" (Taylor's Version) (From The Vault)
+
+Say Don't Go (Taylor's Version) (From The Vault)
+
+Now That We Don't Talk (Taylor's Version) (From The Vault)
+
+Suburban Legends (Taylor's Version) (From The Vault)
+
+Is It Over Now? (Taylor's Version) (From The Vault)
+
+
+
+
 ### The Cruelest Summer
 
 Cruel Summer - Live from TS | The Eras Tour
@@ -629,13 +725,6 @@ If This Was A Movie (Taylor’s Version)
 
 
 
-### Mr. Perfectly Fine (Taylor’s Version) (From The Vault)
-
-Mr. Perfectly Fine (Taylor’s Version) (From The Vault)
-
-
-
-
 ### You All Over Me (feat. Maren Morris) (Taylor’s Version) (From The Vault)
 
 You All Over Me (feat. Maren Morris) (Taylor’s Version) (From The Vault)
@@ -883,7 +972,7 @@ hoax
 ### You're Not Sorry (CSI Remix)
 
 You're Not Sorry - CSI Remix
-   isRemix
+   isRemixWithoutTV
   -> You’re Not Sorry (Taylor’s Version) • Fearless (Taylor's Version)
   -> You’re Not Sorry (Taylor’s Version) • Fearless (Taylor's Version): The Halfway Out The Door Chapter
 
@@ -893,7 +982,7 @@ You're Not Sorry - CSI Remix
 ### Love Story (Digital Dog Remix)
 
 Love Story - Digital Dog Remix
-   isRemix
+   isRemixWithoutTV
   -> Love Story (Taylor’s Version) • Fearless (Taylor's Version)
   -> Love Story (Taylor’s Version) • Love Story (Taylor’s Version)
   -> Love Story (Taylor’s Version) • The More Fearless (Taylor’s Version) Chapter
@@ -1068,6 +1157,7 @@ All Too Well
 
 Wildest Dreams
   -> Wildest Dreams (Taylor's Version) • 1989 (Taylor's Version)
+  -> Wildest Dreams (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
   -> Wildest Dreams (Taylor's Version) • Wildest Dreams (Taylor's Version)
   -> Wildest Dreams (Taylor's Version) • This Love (Taylor’s Version)
 
@@ -1105,6 +1195,7 @@ Mean
 
 How You Get The Girl
   -> How You Get The Girl (Taylor's Version) • 1989 (Taylor's Version)
+  -> How You Get The Girl (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 So It Goes...
   NO TVs
@@ -1138,6 +1229,7 @@ Babe
 
 Welcome To New York
   -> Welcome To New York (Taylor's Version) • 1989 (Taylor's Version)
+  -> Welcome To New York (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 Fearless
   -> Fearless (Taylor’s Version) • Fearless (Taylor's Version)
@@ -1156,6 +1248,7 @@ Ours
 
 Out Of The Woods
   -> Out Of The Woods (Taylor's Version) • 1989 (Taylor's Version)
+  -> Out Of The Woods (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 Come Back...Be Here
   -> Come Back...Be Here (Taylor's Version) • Red (Taylor's Version)
@@ -1166,6 +1259,7 @@ A Place in this World
 
 This Love
   -> This Love (Taylor’s Version) • 1989 (Taylor's Version)
+  -> This Love (Taylor’s Version) • 1989 (Taylor's Version) [Deluxe]
   -> This Love (Taylor’s Version) • This Love (Taylor’s Version)
 
 The Lucky One
@@ -1210,6 +1304,7 @@ Speak Now
 
 Wonderland
   -> Wonderland (Taylor's Version) • 1989 (Taylor's Version)
+  -> Wonderland (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 White Horse
   -> White Horse (Taylor’s Version) • Fearless (Taylor's Version)
@@ -1225,6 +1320,7 @@ Starlight
 
 I Know Places
   -> I Know Places (Taylor's Version) • 1989 (Taylor's Version)
+  -> I Know Places (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 
 
@@ -1232,8 +1328,7 @@ I Know Places
 ### Bad Blood
 
 Bad Blood
-   isRemix
-  -> Bad Blood (Taylor's Version) • 1989 (Taylor's Version)
+  -> Bad Blood (feat. Kendrick Lamar) (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 
 
@@ -1241,8 +1336,9 @@ Bad Blood
 ### Wildest Dreams (R3hab Remix)
 
 Wildest Dreams - R3hab Remix
-   isRemix
+   isRemixWithoutTV
   -> Wildest Dreams (Taylor's Version) • 1989 (Taylor's Version)
+  -> Wildest Dreams (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
   -> Wildest Dreams (Taylor's Version) • Wildest Dreams (Taylor's Version)
   -> Wildest Dreams (Taylor's Version) • This Love (Taylor’s Version)
 
@@ -1253,54 +1349,70 @@ Wildest Dreams - R3hab Remix
 
 Welcome To New York
   -> Welcome To New York (Taylor's Version) • 1989 (Taylor's Version)
+  -> Welcome To New York (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 Blank Space
   -> Blank Space (Taylor's Version) • 1989 (Taylor's Version)
+  -> Blank Space (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 Style
   -> Style (Taylor's Version) • 1989 (Taylor's Version)
+  -> Style (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 Out Of The Woods
   -> Out Of The Woods (Taylor's Version) • 1989 (Taylor's Version)
+  -> Out Of The Woods (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 All You Had To Do Was Stay
   -> All You Had To Do Was Stay (Taylor's Version) • 1989 (Taylor's Version)
+  -> All You Had To Do Was Stay (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 Shake It Off
   -> Shake It Off (Taylor's Version) • 1989 (Taylor's Version)
+  -> Shake It Off (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 I Wish You Would
   -> I Wish You Would (Taylor's Version) • 1989 (Taylor's Version)
+  -> I Wish You Would (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 Bad Blood
   -> Bad Blood (Taylor's Version) • 1989 (Taylor's Version)
+  -> Bad Blood (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 Wildest Dreams
   -> Wildest Dreams (Taylor's Version) • 1989 (Taylor's Version)
+  -> Wildest Dreams (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
   -> Wildest Dreams (Taylor's Version) • Wildest Dreams (Taylor's Version)
   -> Wildest Dreams (Taylor's Version) • This Love (Taylor’s Version)
 
 How You Get The Girl
   -> How You Get The Girl (Taylor's Version) • 1989 (Taylor's Version)
+  -> How You Get The Girl (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 This Love
   -> This Love (Taylor’s Version) • 1989 (Taylor's Version)
+  -> This Love (Taylor’s Version) • 1989 (Taylor's Version) [Deluxe]
   -> This Love (Taylor’s Version) • This Love (Taylor’s Version)
 
 I Know Places
   -> I Know Places (Taylor's Version) • 1989 (Taylor's Version)
+  -> I Know Places (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 Clean
   -> Clean (Taylor's Version) • 1989 (Taylor's Version)
+  -> Clean (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 Wonderland
   -> Wonderland (Taylor's Version) • 1989 (Taylor's Version)
+  -> Wonderland (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 You Are In Love
   -> You Are In Love (Taylor's Version) • 1989 (Taylor's Version)
+  -> You Are In Love (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 New Romantics
   -> New Romantics (Taylor's Version) • 1989 (Taylor's Version)
+  -> New Romantics (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 I Know Places - Voice Memo
   NO TVs
@@ -1318,45 +1430,58 @@ Blank Space - Voice Memo
 
 Welcome To New York
   -> Welcome To New York (Taylor's Version) • 1989 (Taylor's Version)
+  -> Welcome To New York (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 Blank Space
   -> Blank Space (Taylor's Version) • 1989 (Taylor's Version)
+  -> Blank Space (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 Style
   -> Style (Taylor's Version) • 1989 (Taylor's Version)
+  -> Style (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 Out Of The Woods
   -> Out Of The Woods (Taylor's Version) • 1989 (Taylor's Version)
+  -> Out Of The Woods (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 All You Had To Do Was Stay
   -> All You Had To Do Was Stay (Taylor's Version) • 1989 (Taylor's Version)
+  -> All You Had To Do Was Stay (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 Shake It Off
   -> Shake It Off (Taylor's Version) • 1989 (Taylor's Version)
+  -> Shake It Off (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 I Wish You Would
   -> I Wish You Would (Taylor's Version) • 1989 (Taylor's Version)
+  -> I Wish You Would (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 Bad Blood
   -> Bad Blood (Taylor's Version) • 1989 (Taylor's Version)
+  -> Bad Blood (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 Wildest Dreams
   -> Wildest Dreams (Taylor's Version) • 1989 (Taylor's Version)
+  -> Wildest Dreams (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
   -> Wildest Dreams (Taylor's Version) • Wildest Dreams (Taylor's Version)
   -> Wildest Dreams (Taylor's Version) • This Love (Taylor’s Version)
 
 How You Get The Girl
   -> How You Get The Girl (Taylor's Version) • 1989 (Taylor's Version)
+  -> How You Get The Girl (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 This Love
   -> This Love (Taylor’s Version) • 1989 (Taylor's Version)
+  -> This Love (Taylor’s Version) • 1989 (Taylor's Version) [Deluxe]
   -> This Love (Taylor’s Version) • This Love (Taylor’s Version)
 
 I Know Places
   -> I Know Places (Taylor's Version) • 1989 (Taylor's Version)
+  -> I Know Places (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 Clean
   -> Clean (Taylor's Version) • 1989 (Taylor's Version)
+  -> Clean (Taylor's Version) • 1989 (Taylor's Version) [Deluxe]
 
 
 
@@ -1372,7 +1497,7 @@ Sweeter Than Fiction - From "One Chance" Soundtrack
 ### Everything Has Changed (Remix)
 
 Everything Has Changed - Remix
-   isRemix
+   isRemixWithoutTV
   -> Everything Has Changed (feat. Ed Sheeran) (Taylor’s Version) • Red (Taylor's Version)
   -> Everything Has Changed (feat. Ed Sheeran) (Taylor’s Version) • Red (Taylor’s Version): Could You Be The One Chapter
 
@@ -2011,53 +2136,6 @@ A Perfectly Good Heart
 
 Teardrops on My Guitar - Pop Version
   NO TVs
-
-
-
-
-### 1989 (Taylor's Version)
-
-Welcome To New York (Taylor's Version)
-
-Blank Space (Taylor's Version)
-
-Style (Taylor's Version)
-
-Out Of The Woods (Taylor's Version)
-
-All You Had To Do Was Stay (Taylor's Version)
-
-Shake It Off (Taylor's Version)
-
-I Wish You Would (Taylor's Version)
-
-Bad Blood (Taylor's Version)
-
-Wildest Dreams (Taylor's Version)
-
-How You Get The Girl (Taylor's Version)
-
-This Love (Taylor’s Version)
-
-I Know Places (Taylor's Version)
-
-Clean (Taylor's Version)
-
-Wonderland (Taylor's Version)
-
-You Are In Love (Taylor's Version)
-
-New Romantics (Taylor's Version)
-
-"Slut!" (Taylor's Version) (From The Vault)
-
-Say Don't Go (Taylor's Version) (From The Vault)
-
-Now That We Don't Talk (Taylor's Version) (From The Vault)
-
-Suburban Legends (Taylor's Version) (From The Vault)
-
-Is It Over Now? (Taylor's Version) (From The Vault)
 
 
 

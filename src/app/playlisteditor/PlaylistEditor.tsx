@@ -24,8 +24,8 @@ const SELECTION_CATEGORIES = [
   },
   {
     name: "replace-og-remixes",
-    label: "Replace original remixes",
-    predicate: (s: StolenVariants) => s.isRemix,
+    label: "Replace original remixes that don’t have a Taylor’s Version",
+    predicate: (s: StolenVariants) => s.isRemixWithoutTV,
   },
   {
     name: "replace-og-special",
