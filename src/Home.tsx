@@ -59,13 +59,17 @@ export default function Home({
             </div>
           )}
         </div>
-        <div class="mx-auto max-w-xs">
+        <div class="mx-auto mb-6 max-w-xs">
           <small>
             Your account data is processed locally and never leaves your device.{" "}
             <ExternalLink href="https://github.com/FlorianRaediker/spotify-taylors-version">
               View the source code here
             </ExternalLink>
           </small>
+        </div>
+        <div class="mx-auto max-w-md text-2xl text-red-400">
+          This site is not yet generally available and will not work for you,
+          due to Spotify being very slow with reviewing this App.
         </div>
       </div>
     </Scaffold>
