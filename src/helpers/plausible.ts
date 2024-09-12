@@ -35,7 +35,7 @@ export default function setupPlausible() {
       apiHost:
         import.meta.env.VITE_PLAUSIBLE_API_HOST || "https://plausible.io",
       trackLocalhost: true,
-      useSendBeacon: true,
+      useSendBeacon: false,
     })
     plausible.enableAutoPageviews()
     plausible.enableAutoOutboundTracking()
