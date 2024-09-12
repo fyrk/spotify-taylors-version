@@ -1,5 +1,5 @@
 import * as Sentry from "@sentry/react"
-import { SpotifyApi, Track } from "@spotify/web-api-ts-sdk"
+import { SdkOptions, SpotifyApi, Track } from "@spotify/web-api-ts-sdk"
 import {
   IRedirectionStrategy,
   Page,
@@ -13,9 +13,32 @@ const SPOTIFY_ROOT_URL = "https://api.spotify.com/v1/"
 export const createSpotifyApi = (
   redirectionStrategy: IRedirectionStrategy = null,
 ) => {
-  let config = {}
+  let config: SdkOptions = {}
   if (redirectionStrategy) {
-    config = { redirectionStrategy }
+    config = {
+      redirectionStrategy,
+      fetch: async (fullUrl, opts) => {
+        let response = await fetch(fullUrl, opts)
+        try {
+          // retry up to 3 times with increasing backoff
+          if (response.status === 429) {
+            for (let i = 1; i++; i <= 3) {
+              let wait = i ** 2 + parseInt(response.headers.get("Retry-After"))
+              wait += (Math.random() * wait) / 2
+              await new Promise(resolve => setTimeout(resolve, wait * 1000))
+
+              response = await fetch(fullUrl, opts)
+              if (response.status !== 429) {
+                break
+              }
+            }
+          }
+        } catch (e) {
+          console.error("Error during rate limit backoff", e)
+        }
+        return response
+      },
+    }
   }
   return SpotifyApi.withUserAuthorization(
     import.meta.env.VITE_SPOTIFY_CLIENT_ID,
