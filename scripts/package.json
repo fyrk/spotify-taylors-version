@@ -4,7 +4,7 @@
   "main": "fetchTaylorAlbums.ts",
   "type": "module",
   "scripts": {
-    "start": "node --loader ts-node/esm --experimental-specifier-resolution node fetchTaylorAlbums.ts"
+    "start": "node --loader ts-node/esm --experimental-specifier-resolution=\"node\" fetchTaylorAlbums.ts"
   },
   "dependencies": {
     "@spotify/web-api-ts-sdk": "^1.1.2",

@@ -56,10 +56,15 @@ export default function Main() {
       trackPlausibleEvent(PlausibleEvent.AuthError, { props: { error } })
     }
   }, [])
-
-  if (spotify) {
-    return (
-      <Sentry.ErrorBoundary fallback={<Fallback />}>
+  return (
+    <Sentry.ErrorBoundary
+      fallback={<Fallback />}
+      onError={
+        /* for some reason, errors are not logged in production */
+        e => import.meta.env.PROD && console.error(e)
+      }
+    >
+      {spotify ? (
         <App
           onLogout={state => {
             spotify.logOut()
@@ -70,33 +75,29 @@ export default function Main() {
           }}
           spotify={spotify}
         />
-      </Sentry.ErrorBoundary>
-    )
-  }
-
-  return (
-    <Sentry.ErrorBoundary fallback={<Fallback />}>
-      <Home
-        authError={authError}
-        onLogin={async () => {
-          trackPlausibleEvent(PlausibleEvent.LoginClick)
-          try {
-            setAuthError(null)
-            const sdk = createSpotifyApi()
-            const { authenticated } = await sdk.authenticate()
-            if (authenticated) {
-              // this should never be reached since authenticate redirects
-              setSpotify(sdk)
+      ) : (
+        <Home
+          authError={authError}
+          onLogin={async () => {
+            trackPlausibleEvent(PlausibleEvent.LoginClick)
+            try {
+              setAuthError(null)
+              const sdk = createSpotifyApi()
+              const { authenticated } = await sdk.authenticate()
+              if (authenticated) {
+                // this should never be reached since authenticate redirects
+                setSpotify(sdk)
+              }
+            } catch (e) {
+              setAuthError(e.toString() || "")
+              // @ts-ignore
+              const error = new Error("Authenticating failed", { cause: e })
+              Sentry.captureException(error)
+              trackPlausibleEvent(PlausibleEvent.AuthFailed)
             }
-          } catch (e) {
-            setAuthError(e.toString() || "")
-            // @ts-ignore
-            const error = new Error("Authenticating failed", { cause: e })
-            Sentry.captureException(error)
-            trackPlausibleEvent(PlausibleEvent.AuthFailed)
-          }
-        }}
-      />
+          }}
+        />
+      )}
     </Sentry.ErrorBoundary>
   )
 }

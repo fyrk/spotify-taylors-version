@@ -97,7 +97,13 @@ for (const id of [
   "2Z2KdJE0nGGu0qdWA45mza",
   // Love Story (Pop Mix)
   "1iab5rfjNpGhoPlFzPyp4k",
+  // Die Tribute Von Panem/The Hunger Games: Songs From District 12 And Beyond [GERMAN EDITION!; market = AT, CH, DE]
+  "3ia8zOFkXVGPbDLNyhCT0b",
 ]) {
+  if (simplifiedAlbums.some(a => a.id === id)) {
+    console.log("manual album id is now present:", id)
+    continue
+  }
   const album = await spotify.albums.get(id)
   simplifiedAlbums.push({ ...album, album_group: null })
 }
@@ -105,6 +111,7 @@ for (const id of [
 const albums: FullAlbum[] = []
 
 for (const album of simplifiedAlbums) {
+  await new Promise(resolve => setTimeout(resolve, 1000)) // rate limit workaround ...
   console.log(album.name)
   const simplifiedTracks: SimplifiedTrack[] = []
   for await (const { item } of getPaginatedItems(
