@@ -200,18 +200,22 @@ const LogOutButton = ({
   onLogout: () => void
 }) => {
   const profileImage =
-    user && user.images.reduce((p, c) => (p.width < c.width ? c : p))
+    user && user.images.length
+      ? user.images.reduce((p, c) => (p.width < c.width ? c : p))
+      : null
   return (
     <BaseButton
       class="bg-neutral-600 p-2 text-sm font-semibold shadow-sm shadow-neutral-950 sm:text-xl"
       onClick={onLogout}
     >
-      <span class="flex items-center gap-2">
-        <img
-          src={profileImage && profileImage.url}
-          class="h-[1.5em] w-[1.5em] rounded-full"
-        />
-        <span class="mr-1 whitespace-nowrap">Log out</span>
+      <span class="mx-1 flex items-center gap-2">
+        {profileImage && (
+          <img
+            src={profileImage.url}
+            class="h-[1.5em] w-[1.5em] rounded-full"
+          />
+        )}
+        <span class="whitespace-nowrap">Log out</span>
       </span>
     </BaseButton>
   )
